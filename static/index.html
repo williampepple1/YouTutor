@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTutor — Interactive Learning</title>
+<style>
+  /* ── Reset & Variables ──────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #12121a;
+    --bg3: #1a1a28;
+    --surface: #1e1e30;
+    --surface2: #252540;
+    --border: #2a2a45;
+    --text: #e0e0f0;
+    --text2: #9898b8;
+    --accent: #6c5ce7;
+    --accent2: #a29bfe;
+    --accent-glow: rgba(108, 92, 231, 0.3);
+    --green: #00cec9;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  html { font-size: 15px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+
+  /* ── Scrollbar ──────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Header ──────────────────────────────────────────────────── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent2), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+  .search-box {
+    flex: 1;
+    max-width: 640px;
+    display: flex;
+    gap: 8px;
+  }
+  .search-box input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box input::placeholder { color: var(--text2); }
+  .search-box button {
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .search-box button:hover { background: #7c6df7; }
+  .search-box button:active { transform: scale(0.97); }
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  .app-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .app-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── Main Column ──────────────────────────────────────────────── */
+  .main-col {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Results Grid ────────────────────────────────────────────── */
+  .results-section {
+    overflow-y: auto;
+    flex: 1;
+    padding: 20px 24px;
+  }
+  .results-section.hidden { display: none; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .video-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .video-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 32px rgba(108,92,231,0.15);
+  }
+  .video-card .thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    background: var(--bg3);
+  }
+  .video-card .info { padding: 12px 14px; }
+  .video-card .title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .video-card .channel {
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+  .video-card .meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  /* ── Player Section ──────────────────────────────────────────── */
+  .player-section {
+    display: none;
+    flex-direction: column;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .player-section.active { display: flex; }
+  .player-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+  }
+  .player-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .player-info {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .player-info .left { flex: 1; min-width: 0; }
+  .player-info .left h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player-info .left .channel {
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+  .player-info .close-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .player-info .close-btn:hover { background: var(--surface2); }
+
+  /* ── Side Panel ──────────────────────────────────────────────── */
+  .side-panel {
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .side-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .side-tabs button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text2);
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .side-tabs button:hover { color: var(--text); }
+  .side-tabs button.active {
+    color: var(--accent2);
+    border-bottom-color: var(--accent);
+  }
+
+  .side-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .side-pane {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .side-pane.active { display: block; }
+
+  /* ── Transcript Pane ──────────────────────────────────────────── */
+  .transcript-line {
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    border-left: 3px solid transparent;
+    margin-bottom: 2px;
+  }
+  .transcript-line:hover { background: var(--surface); }
+  .transcript-line .ts {
+    color: var(--accent2);
+    font-weight: 600;
+    font-size: 0.75rem;
+    display: inline-block;
+    min-width: 48px;
+    cursor: pointer;
+  }
+  .transcript-line .ts:hover { text-decoration: underline; }
+  .transcript-placeholder {
+    color: var(--text2);
+    text-align: center;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+
+  /* ── Chat Pane ───────────────────────────────────────────────── */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-msg {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    line-height: 1.5;
+    font-size: 0.9rem;
+    max-width: 90%;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .chat-msg.user {
+    background: var(--accent);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .chat-msg.assistant {
+    background: var(--surface);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-msg.assistant .source-link {
+    display: inline-block;
+    color: var(--accent2);
+    font-size: 0.75rem;
+    margin-top: 6px;
+    cursor: pointer;
+  }
+  .chat-msg.assistant .source-link:hover { text-decoration: underline; }
+  .chat-msg.typing {
+    background: var(--surface);
+    color: var(--text2);
+    align-self: flex-start;
+    font-style: italic;
+  }
+  .chat-placeholder {
+    color: var(--text2);
+    text-align: center;
+    padding: 40px 20px;
+    line-height: 1.6;
+    font-size: 0.9rem;
+  }
+  .chat-input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .chat-input-area input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+  }
+  .chat-input-area input:focus { border-color: var(--accent); }
+  .chat-input-area button {
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .chat-input-area button:hover { background: #7c6df7; }
+  .chat-input-area button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ── Empty state ──────────────────────────────────────────────── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text2);
+    text-align: center;
+    padding: 40px;
+    gap: 12px;
+  }
+  .empty-state .icon { font-size: 3rem; opacity: 0.5; }
+  .empty-state h2 { font-size: 1.2rem; color: var(--text); }
+  .empty-state p { font-size: 0.9rem; max-width: 360px; line-height: 1.6; }
+
+  /* ── Loading ──────────────────────────────────────────────────── */
+  .loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Responsive tweaks ────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .app-layout { grid-template-columns: 1fr; }
+    .side-panel { border-left: none; border-top: 1px solid var(--border); }
+    .results-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    header { flex-direction: column; gap: 10px; }
+    .search-box { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────── -->
+<header>
+  <h1>🎓 YouTutor</h1>
+  <div class="search-box">
+    <input id="searchInput" type="text" placeholder="Search any topic to learn..." spellcheck="false"
+           autocomplete="off" />
+    <button id="searchBtn">Search</button>
+  </div>
+</header>
+
+<!-- ── Main Layout ─────────────────────────────────────────────── -->
+<div class="app-layout">
+
+  <!-- Main Column -->
+  <div class="main-col">
+    <!-- Player -->
+    <div class="player-section" id="playerSection">
+      <div class="player-wrap">
+        <iframe id="playerFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <div class="player-info">
+        <div class="left">
+          <h2 id="playerTitle">Video Title</h2>
+          <span class="channel" id="playerChannel">Channel</span>
+        </div>
+        <button class="close-btn" id="closePlayerBtn">✕ Close</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-section" id="resultsSection">
+      <div id="resultsGrid" class="results-grid"></div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="emptyState">
+      <div class="icon">🔍</div>
+      <h2>Search anything to learn</h2>
+      <p>Type a topic above and discover YouTube videos with AI-powered explanations. Watch, read the transcript, and ask questions.</p>
+    </div>
+  </div>
+
+  <!-- Side Panel -->
+  <div class="side-panel" id="sidePanel">
+    <div class="side-tabs">
+      <button class="active" data-tab="transcript">📝 Transcript</button>
+      <button data-tab="chat">💬 Ask</button>
+    </div>
+
+    <!-- Transcript pane -->
+    <div class="side-content">
+      <div class="side-pane active" id="transcriptPane">
+        <div class="transcript-placeholder" id="transcriptPlaceholder">
+          <p>🎬 Search for a video to see its transcript here.</p>
+          <p style="margin-top:8px;font-size:0.82rem;">Click any timestamp to jump in the video.</p>
+        </div>
+        <div id="transcriptContent"></div>
+      </div>
+
+      <!-- Chat pane -->
+      <div class="side-pane" id="chatPane">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-placeholder" id="chatPlaceholder">
+            <p>💡 Ask questions about the current video.</p>
+            <p style="margin-top:6px;font-size:0.82rem;">The answers come directly from the transcript.</p>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input id="chatInput" type="text" placeholder="Ask about this video..." spellcheck="false" />
+          <button id="chatSendBtn">Ask</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────
+const state = {
+  currentVideoId: null,
+  currentTranscript: null,
+  transcriptChunks: [],
+};
+
+// ── DOM refs ──────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const searchInput = $('searchInput');
+const searchBtn = $('searchBtn');
+const resultsGrid = $('resultsGrid');
+const resultsSection = $('resultsSection');
+const emptyState = $('emptyState');
+const playerSection = $('playerSection');
+const playerFrame = $('playerFrame');
+const playerTitle = $('playerTitle');
+const playerChannel = $('playerChannel');
+const closePlayerBtn = $('closePlayerBtn');
+const transcriptPlaceholder = $('transcriptPlaceholder');
+const transcriptContent = $('transcriptContent');
+const chatMessages = $('chatMessages');
+const chatPlaceholder = $('chatPlaceholder');
+const chatInput = $('chatInput');
+const chatSendBtn = $('chatSendBtn');
+
+// ── Tab switching ────────────────────────────────────────────────
+document.querySelectorAll('.side-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.side-tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.side-pane').forEach(p => p.classList.remove('active'));
+    $(btn.dataset.tab + 'Pane').classList.add('active');
+  });
+});
+
+// ── Search ────────────────────────────────────────────────────────
+async function doSearch(query) {
+  if (!query.trim()) return;
+  resultsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;"><div class="loading-spinner"></div><p style="margin-top:12px;color:var(--text2);">Searching...</p></div>';
+  resultsSection.classList.remove('hidden');
+  emptyState.style.display = 'none';
+
+  try {
+    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&max_results=12`);
+    const data = await res.json();
+    renderVideos(data.videos || []);
+  } catch (e) {
+    resultsGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#e74c3c;">Search failed: ${e.message}</div>`;
+  }
+}
+
+function renderVideos(videos) {
+  if (!videos.length) {
+    resultsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2);">No videos found. Try a different search.</div>';
+    return;
+  }
+  resultsGrid.innerHTML = '';
+  videos.forEach(v => {
+    const dur = v.duration ? `${Math.floor(v.duration / 60)}:${String(v.duration % 60).padStart(2, '0')}` : '';
+    const views = v.views >= 1000 ? `${(v.views / 1000).toFixed(1)}K` : (v.views || '—');
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.innerHTML = `
+      <img class="thumb" src="${v.thumbnail || ''}" alt="${escHtml(v.title)}" loading="lazy"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22480%22 height=%22360%22 fill=%22%231a1a28%22><text x=%22240%22 y=%22180%22 text-anchor=%22middle%22 fill=%22%239898b8%22 font-size=%2220%22>No thumbnail</text></svg>'">
+      <div class="info">
+        <div class="title">${escHtml(v.title)}</div>
+        <div class="channel">${escHtml(v.channel)}</div>
+        <div class="meta">
+          <span>⏱ ${dur}</span>
+          <span>👁 ${views}</span>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => loadVideo(v.id, v.title, v.channel));
+    resultsGrid.appendChild(card);
+  });
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ── Load Video ────────────────────────────────────────────────────
+async function loadVideo(videoId, title, channel) {
+  state.currentVideoId = videoId;
+  state.currentTranscript = null;
+
+  // Show player
+  playerFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+  playerTitle.textContent = title || 'Video';
+  playerChannel.textContent = channel || '';
+  playerSection.classList.add('active');
+  playerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Reset transcript
+  transcriptContent.innerHTML = '';
+  transcriptPlaceholder.innerHTML = '<div class="loading-spinner"></div><p style="margin-top:12px;">Loading transcript...</p>';
+  transcriptPlaceholder.style.display = 'block';
+
+  // Reset chat
+  chatPlaceholder.innerHTML = '<p>💬 Ask a question about this video!</p>';
+  chatMessages.innerHTML = '';
+  chatMessages.appendChild(chatPlaceholder);
+
+  // Fetch transcript
+  try {
+    const res = await fetch(`/api/transcript/${videoId}`);
+    const data = await res.json();
+    state.currentTranscript = data;
+    renderTranscript(data.segments || []);
+  } catch (e) {
+    transcriptPlaceholder.innerHTML = `
+      <p>⚠️ No transcript available for this video.</p>
+      <p style="font-size:0.82rem;margin-top:6px;">Some videos don&#39;t have captions enabled.</p>
+    `;
+    transcriptPlaceholder.style.display = 'block';
+  }
+}
+
+function renderTranscript(segments) {
+  transcriptPlaceholder.style.display = 'none';
+  transcriptContent.innerHTML = '';
+  if (!segments.length) {
+    transcriptPlaceholder.innerHTML = '<p>No transcript segments found.</p>';
+    transcriptPlaceholder.style.display = 'block';
+    return;
+  }
+  segments.forEach(seg => {
+    const line = document.createElement('div');
+    line.className = 'transcript-line';
+    line.innerHTML = `<span class="ts">${seg.timestamp}</span> ${escHtml(seg.text)}`;
+    line.querySelector('.ts').addEventListener('click', (e) => {
+      e.stopPropagation();
+      seekTo(seg.start);
+    });
+    line.addEventListener('click', () => seekTo(seg.start));
+    transcriptContent.appendChild(line);
+  });
+}
+
+function seekTo(seconds) {
+  // Use YouTube JS API if available, otherwise just send a message
+  if (playerFrame.contentWindow) {
+    playerFrame.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'seekTo',
+      args: [seconds, true]
+    }), '*');
+  }
+}
+
+// ── Close Player ──────────────────────────────────────────────────
+closePlayerBtn.addEventListener('click', () => {
+  playerSection.classList.remove('active');
+  playerFrame.src = '';
+  state.currentVideoId = null;
+});
+
+// ── Chat ──────────────────────────────────────────────────────────
+async function sendChat() {
+  const question = chatInput.value.trim();
+  if (!question || !state.currentVideoId) return;
+
+  // Remove placeholder
+  chatPlaceholder.style.display = 'none';
+
+  // Add user message
+  addChatMessage(question, 'user');
+  chatInput.value = '';
+  chatSendBtn.disabled = true;
+
+  // Add typing indicator
+  const typing = addChatMessage('Thinking...', 'typing');
+
+  try {
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ video_id: state.currentVideoId, question }),
+    });
+    const data = await res.json();
+
+    // Remove typing indicator
+    typing.remove();
+
+    if (data.answer) {
+      const sourceHtml = (data.sources || []).map(s =>
+        `<span class="source-link" onclick="seekTo(${s.start})">⏱ ${s.timestamp}</span>`
+      ).join(' ');
+
+      addChatMessage(data.answer + (sourceHtml ? '<br><br>' + sourceHtml : ''), 'assistant');
+    } else {
+      addChatMessage('Sorry, I couldn\'t find an answer in the transcript.', 'assistant');
+    }
+  } catch (e) {
+    typing.remove();
+    addChatMessage(`Error: ${e.message}`, 'assistant');
+  }
+
+  chatSendBtn.disabled = false;
+  scrollChat();
+}
+
+function addChatMessage(text, role) {
+  const msg = document.createElement('div');
+  msg.className = `chat-msg ${role}`;
+  msg.innerHTML = text;
+  chatMessages.appendChild(msg);
+  scrollChat();
+  return msg;
+}
+
+function scrollChat() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+chatSendBtn.addEventListener('click', sendChat);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendChat();
+});
+
+// ── Search events ─────────────────────────────────────────────────
+searchBtn.addEventListener('click', () => doSearch(searchInput.value));
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch(searchInput.value);
+});
+
+// Auto-focus search
+searchInput.focus();
+</script>
+</body>
+</html>

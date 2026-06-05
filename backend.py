@@ -1,0 +1,284 @@
+"""
+YouTutor Backend
+FastAPI app that handles YouTube search, transcript fetching, and Q&A.
+"""
+
+import json
+import re
+import subprocess
+import sys
+import os
+from pathlib import Path
+from typing import Optional
+from collections import Counter
+
+from fastapi import FastAPI, Query, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+import uvicorn
+
+# ── App setup ──────────────────────────────────────────────────────────────
+
+app = FastAPI(title="YouTutor")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Resolve paths
+HERE = Path(__file__).parent
+STATIC = HERE / "static"
+VENV_PYTHON = HERE.parent / ".venv" / "Scripts" / "python.exe"
+
+
+# ── Helpers ────────────────────────────────────────────────────────────────
+
+def run_ytdlp(*args: str, timeout: int = 60) -> list[dict]:
+    """Run yt-dlp and return list of parsed JSON results (one per result)."""
+    cmd = [str(VENV_PYTHON), "-m", "yt_dlp", *args]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        if result.returncode != 0:
+            raise RuntimeError(f"yt-dlp error: {result.stderr[:500]}")
+        lines = result.stdout.strip().split("\n")
+        if not lines or not lines[0].strip():
+            return []
+        return [json.loads(line) for line in lines if line.strip()]
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("yt-dlp timed out")
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Failed to parse yt-dlp output: {e}")
+
+
+def get_transcript(video_id: str) -> list[dict]:
+    """Fetch transcript segments for a video."""
+    try:
+        from youtube_transcript_api import YouTubeTranscriptApi
+        api = YouTubeTranscriptApi()
+        transcript = api.fetch(video_id, languages=['en'])
+        return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+    except Exception as e:
+        # Try without language
+        try:
+            api = YouTubeTranscriptApi()
+            transcript = api.fetch(video_id)
+            return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+        except Exception as e2:
+            raise RuntimeError(f"Transcript unavailable: {e2}")
+
+
+def chunk_transcript(segments: list[dict], chunk_size: int = 800) -> list[dict]:
+    """Split transcript into overlapping chunks for search."""
+    chunks = []
+    current_chunk = []
+    current_len = 0
+
+    for seg in segments:
+        text = seg.get("text", "").strip()
+        if not text:
+            continue
+        word_count = len(text.split())
+        if current_len + word_count > chunk_size and current_chunk:
+            chunks.append({
+                "text": " ".join(s["text"] for s in current_chunk),
+                "start": current_chunk[0]["start"],
+                "duration": current_chunk[-1]["start"] + current_chunk[-1]["duration"] - current_chunk[0]["start"],
+                "segments": current_chunk,
+            })
+            # overlap: keep last 30% of current chunk
+            overlap_idx = max(0, len(current_chunk) - int(len(current_chunk) * 0.3))
+            current_chunk = current_chunk[overlap_idx:]
+            current_len = sum(len(s["text"].split()) for s in current_chunk)
+
+        current_chunk.append(seg)
+        current_len += word_count
+
+    if current_chunk:
+        chunks.append({
+            "text": " ".join(s["text"] for s in current_chunk),
+            "start": current_chunk[0]["start"],
+            "duration": current_chunk[-1]["start"] + current_chunk[-1]["duration"] - current_chunk[0]["start"],
+            "segments": current_chunk,
+        })
+
+    return chunks
+
+
+def find_relevant_chunks(question: str, chunks: list[dict], top_k: int = 3) -> list[dict]:
+    """Find the most relevant transcript chunks for a question using keyword matching."""
+    # Extract words from the question, keeping meaningful terms
+    q_lower = question.lower()
+    words = re.findall(r'\b[a-zA-Z]{2,}\b', q_lower)
+    stopwords = {"the", "and", "for", "are", "but", "not", "you", "all", "can",
+                 "had", "her", "was", "one", "our", "out", "has", "have", "been",
+                 "this", "that", "with", "from", "what", "when", "where", "how",
+                 "why", "which", "does", "about", "tell", "explain", "give", "its",
+                 "also", "they", "them", "their", "than", "then", "just", "like",
+                 "use", "used", "using", "get", "got", "make", "made", "know",
+                 "really", "very", "much", "some", "any", "way", "thing", "things"}
+    keywords = [w for w in words if w not in stopwords]
+
+    if not keywords:
+        return chunks[:top_k]
+
+    # Check for phrases: 2-3 word sequences from the question
+    question_phrases = []
+    kw_set = set(keywords)
+    for i in range(len(keywords) - 1):
+        question_phrases.append(keywords[i] + " " + keywords[i + 1])
+    for i in range(len(keywords) - 2):
+        question_phrases.append(keywords[i] + " " + keywords[i + 1] + " " + keywords[i + 2])
+
+    scored = []
+    for i, chunk in enumerate(chunks):
+        chunk_lower = chunk["text"].lower()
+        chunk_words = set(re.findall(r'\b[a-zA-Z]{2,}\b', chunk_lower))
+
+        # Score: keyword overlap + phrase bonuses + position bonus
+        overlap = sum(1 for kw in keywords if kw in chunk_words)
+        phrase_bonus = sum(5 for phrase in question_phrases if phrase in chunk_lower)
+        # Boost chunks that occur earlier (more likely to cover intro topics)
+        position_bonus = max(0, 1.0 - (i / len(chunks)) * 0.3)
+        total_score = overlap + phrase_bonus + position_bonus
+
+        if total_score > 0:
+            scored.append((total_score, i, chunk))
+
+    scored.sort(key=lambda x: -x[0])
+    return [item[2] for item in scored[:top_k]]
+
+
+def format_timestamp(seconds: float) -> str:
+    """Convert seconds to MM:SS or HH:MM:SS."""
+    h, r = divmod(int(seconds), 3600)
+    m, s = divmod(r, 60)
+    if h:
+        return f"{h}:{m:02d}:{s:02d}"
+    return f"{m}:{s:02d}"
+
+
+# ── API Routes ─────────────────────────────────────────────────────────────
+
+@app.get("/api/search")
+async def search_videos(q: str = Query(..., description="Search query"), max_results: int = 12):
+    """Search YouTube for videos."""
+    try:
+        results = run_ytdlp(
+            "ytsearch" + str(max_results) + ":" + q,
+            "--dump-json",
+            "--no-warnings",
+            "--flat-playlist",
+            "-s",
+            timeout=60,
+        )
+    except RuntimeError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+    videos = []
+    for r in results:
+        vid = r.get("id", "")
+        videos.append({
+            "id": vid,
+            "title": r.get("title", ""),
+            "channel": r.get("channel", ""),
+            "duration": r.get("duration", 0),
+            "views": r.get("view_count", 0),
+            "thumbnail": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+            "description": (r.get("description") or "")[:300],
+        })
+
+    return {"videos": videos}
+
+
+@app.get("/api/transcript/{video_id}")
+async def fetch_transcript(video_id: str):
+    """Get transcript for a YouTube video."""
+    try:
+        segments = get_transcript(video_id)
+    except RuntimeError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    full_text = " ".join(s["text"] for s in segments)
+
+    return {
+        "video_id": video_id,
+        "segments": [
+            {
+                "text": s["text"],
+                "start": s["start"],
+                "duration": s.get("duration", 0),
+                "timestamp": format_timestamp(s["start"]),
+            }
+            for s in segments
+        ],
+        "full_text": full_text,
+        "total_segments": len(segments),
+    }
+
+
+class AskRequest(BaseModel):
+    video_id: str
+    question: str
+
+
+@app.post("/api/ask")
+async def ask_question(req: AskRequest):
+    """Ask a question about a video and get answer from transcript."""
+    try:
+        segments = get_transcript(req.video_id)
+    except RuntimeError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    chunks = chunk_transcript(segments)
+    relevant = find_relevant_chunks(req.question, chunks)
+
+    if not relevant:
+        return {
+            "answer": "I couldn't find specific information about that in the video transcript.",
+            "sources": [],
+        }
+
+    # Build answer from relevant chunks
+    context_parts = []
+    sources = []
+    for chunk in relevant:
+        ts = format_timestamp(chunk["start"])
+        context_parts.append(f"[{ts}] {chunk['text']}")
+        sources.append({
+            "text": chunk["text"][:200] + ("..." if len(chunk["text"]) > 200 else ""),
+            "timestamp": ts,
+            "start": chunk["start"],
+        })
+
+    context = "\n\n".join(context_parts)
+
+    return {
+        "answer": context,
+        "sources": sources,
+        "found_chunks": len(relevant),
+    }
+
+
+# ── Static files & root ────────────────────────────────────────────────────
+
+if STATIC.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC)), name="static")
+
+
+@app.get("/")
+async def index():
+    return FileResponse(str(STATIC / "index.html"))
+
+
+# ── Entrypoint ─────────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    print(f"🚀 YouTutor running at http://localhost:{port}")
+    uvicorn.run(app, host="0.0.0.0", port=port)
