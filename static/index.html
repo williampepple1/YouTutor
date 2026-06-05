@@ -880,7 +880,8 @@ searchInput.addEventListener('keydown', e => {
 // Auto-focus search
 searchInput.focus();
 
-// ── Settings Modal ────────────────────────────────────────────────
+// ── Settings Modal (wrapped in DOMContentLoaded so modal HTML is in DOM) ─
+document.addEventListener('DOMContentLoaded', function() {
 const defaultConfig = {
   api_key: '',
   base_url: 'https://api.deepseek.com',
@@ -997,7 +998,8 @@ document.getElementById('settingsTest').addEventListener('click', async () => {
     status.className = 'status show err';
     status.textContent = `Error: ${e.message}`;
   }
-});
+}); // end settingsTest click
+}); // end DOMContentLoaded
 </script>
 
 <!-- ── Settings Modal ──────────────────────────────────────────── -->
