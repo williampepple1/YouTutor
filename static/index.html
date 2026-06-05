@@ -185,6 +185,32 @@
     height: 100%;
     border: none;
   }
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+    cursor: pointer;
+    z-index: 10;
+    transition: opacity 0.3s;
+  }
+  .play-overlay.hidden { opacity: 0; pointer-events: none; }
+  .play-overlay .play-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 4px 24px rgba(108,92,231,0.5);
+    transition: transform 0.2s;
+  }
+  .play-overlay:hover .play-icon { transform: scale(1.1); }
   .player-info {
     padding: 14px 20px;
     display: flex;
@@ -579,6 +605,9 @@
     <div class="player-section" id="playerSection">
       <div class="player-wrap">
         <iframe id="playerFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="play-overlay" id="playOverlay">
+          <div class="play-icon">▶</div>
+        </div>
       </div>
       <div class="player-info">
         <div class="left">
@@ -637,6 +666,61 @@
 </div>
 
 <script>
+// ── YouTube IFrame API ───────────────────────────────────────────
+let ytPlayer = null;
+let pendingVideoId = null;
+let pendingVideoTitle = '';
+let pendingVideoChannel = '';
+
+function onYouTubeIframeAPIReady() {
+  // API loaded, ready to create players
+}
+
+function loadPlayer(videoId) {
+  const wrap = document.querySelector('.player-wrap');
+  const existing = document.getElementById('playerFrame');
+  if (existing) existing.remove();
+
+  const iframe = document.createElement('iframe');
+  iframe.id = 'playerFrame';
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.allowFullscreen = true;
+  iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=1&rel=0`;
+  wrap.insertBefore(iframe, wrap.firstChild);
+
+  if (ytPlayer) {
+    ytPlayer.destroy();
+    ytPlayer = null;
+  }
+
+  ytPlayer = new YT.Player('playerFrame', {
+    events: {
+      onReady: () => {},
+      onStateChange: (e) => {
+        // 1 = playing, 2 = paused
+        const overlay = document.getElementById('playOverlay');
+        if (e.data === YT.PlayerState.PLAYING) {
+          overlay.classList.add('hidden');
+        }
+      },
+    },
+  });
+}
+
+// Load YouTube IFrame API
+const tag = document.createElement('script');
+tag.src = 'https://www.youtube.com/iframe_api';
+const firstScript = document.getElementsByTagName('script')[0];
+firstScript.parentNode.insertBefore(tag, firstScript);
+
+// Play overlay click
+document.getElementById('playOverlay').addEventListener('click', () => {
+  if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+    ytPlayer.playVideo();
+  } else if (pendingVideoId) {
+    loadPlayer(pendingVideoId);
+  }
+});
 // ── State ────────────────────────────────────────────────────────
 const state = {
   currentVideoId: null,
@@ -730,11 +814,12 @@ async function loadVideo(videoId, title, channel) {
   state.currentTranscript = null;
 
   // Show player
-  playerFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+  loadPlayer(videoId);
   playerTitle.textContent = title || 'Video';
   playerChannel.textContent = channel || '';
   playerSection.classList.add('active');
   playerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('playOverlay').classList.remove('hidden');
 
   // Reset transcript
   transcriptContent.innerHTML = '';
@@ -783,20 +868,21 @@ function renderTranscript(segments) {
 }
 
 function seekTo(seconds) {
-  // Use YouTube JS API if available, otherwise just send a message
-  if (playerFrame.contentWindow) {
-    playerFrame.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func: 'seekTo',
-      args: [seconds, true]
-    }), '*');
+  if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+    ytPlayer.seekTo(seconds, true);
+    if (typeof ytPlayer.playVideo === 'function') {
+      ytPlayer.playVideo();
+    }
   }
 }
 
 // ── Close Player ──────────────────────────────────────────────────
 closePlayerBtn.addEventListener('click', () => {
   playerSection.classList.remove('active');
-  playerFrame.src = '';
+  if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+    ytPlayer.destroy();
+    ytPlayer = null;
+  }
   state.currentVideoId = null;
 });
 
