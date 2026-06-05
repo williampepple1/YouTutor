@@ -1,3 +1,12 @@
+---
+title: YouTutor
+emoji: 🎓
+colorFrom: purple
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # 🎓 YouTutor
 
 **An interactive YouTube learning agent** — search, watch, and learn from YouTube videos with AI-powered transcript Q&A.

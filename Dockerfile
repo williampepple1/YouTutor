@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app
 COPY . .
 
-# Expose the port
-EXPOSE 8080
+# Expose the port (HF Spaces expects 7860)
+EXPOSE 7860
 
-# Run with uvicorn directly (no venv needed in Docker)
-CMD ["uvicorn", "backend:app", "--host", "0.0.0.0", "--port", "8080"]
+# Use $PORT env var (set by HF Spaces to 7860, or override with docker-compose)
+CMD uvicorn backend:app --host 0.0.0.0 --port ${PORT:-7860}
