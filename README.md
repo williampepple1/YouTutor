@@ -14,37 +14,53 @@ Inspired by Scrimba's interactive screencasts: watch a video, follow along with 
 | ▶️ **Watch** | Embedded YouTube player with autoplay |
 | 📝 **Transcript** | Full transcript with clickable timestamps — click any timestamp to jump the video to that point |
 | 💬 **Q&A** | Ask questions about the current video and get answers sourced from the transcript |
+| 🔑 **BYOK** | Bring Your Own Key — plug in DeepSeek, OpenAI, or any OpenAI-compatible LLM for AI-powered answers |
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Python 3.10+**
-- **A virtual environment** with the following packages installed:
+### Option A: Docker (recommended)
 
 ```bash
-pip install fastapi uvicorn youtube-transcript-api yt-dlp
+docker compose up -d
 ```
 
-### Run it
+Open **http://localhost:8080** in your browser.
+
+### Option B: Local Python
+
+**Prerequisites:** Python 3.10+ and a virtual environment.
 
 ```bash
+pip install -r requirements.txt
 python backend.py
 ```
 
 Open **http://localhost:8080** in your browser.
 
-### Or use the included venv
-
-```bash
-~/.venv/Scripts/python.exe backend.py
-```
+> **Windows users** with the included venv:
+> ```bash
+> ~/.venv/Scripts/python.exe backend.py
+> ```
 
 ## 🧠 How It Works
 
 1. **Search** — the backend uses `yt-dlp` to search YouTube and returns video results with thumbnails
 2. **Transcript** — when you click a video, the backend fetches its transcript via `youtube-transcript-api`
-3. **Q&A** — your question is matched against transcript chunks using keyword + phrase scoring, and the most relevant sections are returned with timestamps
+3. **Q&A** — two modes:
+   - **🔑 LLM mode** (with API key configured): your question + the relevant transcript sections are sent to your chosen LLM (DeepSeek, OpenAI, etc.) for intelligent, contextual answers
+   - **📖 Keyword mode** (no key): your question is matched against transcript chunks using keyword + phrase scoring, and the most relevant sections are returned with timestamps
+
+### Bring Your Own Key (BYOK)
+
+Click the ⚙️ gear icon in the header to configure your LLM:
+
+| Field | Default | Notes |
+|-------|---------|-------|
+| API Key | — | Your provider key (stored in localStorage, never on the server) |
+| API Base URL | `https://api.deepseek.com` | Any OpenAI-compatible endpoint |
+| Model | `deepseek-chat` | e.g. `gpt-4o-mini`, `claude-sonnet-4`, `gemini-2.0-flash` |
+
+Hit **🔌 Test** to verify your connection, then ask away — answers will show a **🤖 LLM** badge.
 
 ### API Endpoints
 
@@ -65,10 +81,12 @@ Open **http://localhost:8080** in your browser.
 
 ```
 YouTutor/
-├── backend.py          # FastAPI server
+├── backend.py           # FastAPI server
+├── Dockerfile           # Docker image
+├── docker-compose.yml   # Docker orchestration
+├── requirements.txt     # Python dependencies
 ├── static/
-│   └── index.html      # Single-page frontend
-├── install_deps.py     # Dependency installer
+│   └── index.html       # Single-page frontend
 ├── .gitignore
 └── README.md
 ```

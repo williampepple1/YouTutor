@@ -1,0 +1,13 @@
+services:
+  yoututor:
+    build: .
+    container_name: yoututor
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # Optional: mount a volume for caching yt-dlp data
+    # volumes:
+    #   - yt-dlp-cache:/root/.cache/yt-dlp
+
+# volumes:
+#   yt-dlp-cache:

@@ -38,7 +38,8 @@ app.add_middleware(
 HERE = Path(__file__).parent
 STATIC = HERE / "static"
 HOME = Path.home()
-VENV_PYTHON = HOME / ".venv" / "Scripts" / "python.exe"
+VENV_PYTHON_candidate = HOME / ".venv" / "Scripts" / "python.exe"
+VENV_PYTHON = VENV_PYTHON_candidate if VENV_PYTHON_candidate.exists() else Path(sys.executable)
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────
