@@ -17,6 +17,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import urllib.request as http_req
+import urllib.error as http_err
+import ssl
 import uvicorn
 
 # ── App setup ──────────────────────────────────────────────────────────────
@@ -34,7 +37,8 @@ app.add_middleware(
 # Resolve paths
 HERE = Path(__file__).parent
 STATIC = HERE / "static"
-VENV_PYTHON = HERE.parent / ".venv" / "Scripts" / "python.exe"
+HOME = Path.home()
+VENV_PYTHON = HOME / ".venv" / "Scripts" / "python.exe"
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────
@@ -163,6 +167,71 @@ def format_timestamp(seconds: float) -> str:
     return f"{m}:{s:02d}"
 
 
+def ask_llm(question: str, transcript_context: str, config: dict) -> str:
+    """Call an OpenAI-compatible LLM API to answer a question from transcript context.
+
+    config expects: {api_key, base_url (optional), model (optional)}
+    Defaults to DeepSeek if base_url/model omitted.
+    """
+    if not config or not config.get("api_key"):
+        return None
+
+    base_url = (config.get("base_url") or "https://api.deepseek.com").rstrip("/")
+    model = config.get("model") or "deepseek-chat"
+    api_key = config["api_key"]
+
+    # Ensure the URL ends with /chat/completions
+    if not base_url.endswith("/chat/completions"):
+        if not base_url.endswith("/v1"):
+            base_url += "/v1"
+        base_url += "/chat/completions"
+
+    payload = json.dumps({
+        "model": model,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful tutor explaining video content. "
+                    "You will be given a transcript excerpt and a question. "
+                    "Answer the question clearly and concisely based ONLY on the "
+                    "transcript content provided. If the transcript doesn't contain "
+                    "the answer, say so. Reference timestamps where helpful."
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"Transcript excerpt from the video:\n\n{transcript_context}\n\n"
+                           f"Question: {question}",
+            },
+        ],
+        "temperature": 0.3,
+        "max_tokens": 1024,
+    }).encode("utf-8")
+
+    req = http_req.Request(
+        base_url,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
+
+    try:
+        ctx = ssl.create_default_context()
+        resp = http_req.urlopen(req, context=ctx, timeout=30)
+        body = json.loads(resp.read().decode("utf-8"))
+        choices = body.get("choices", [])
+        if choices:
+            return choices[0].get("message", {}).get("content", "")
+        return None
+    except Exception as e:
+        # Return the error so the frontend can show it
+        raise RuntimeError(f"LLM API error: {e}")
+
+
 # ── API Routes ─────────────────────────────────────────────────────────────
 
 @app.get("/api/search")
@@ -222,14 +291,25 @@ async def fetch_transcript(video_id: str):
     }
 
 
+class LlmConfig(BaseModel):
+    api_key: str = ""
+    base_url: str = ""
+    model: str = ""
+
+
 class AskRequest(BaseModel):
     video_id: str
     question: str
+    llm: Optional[LlmConfig] = None
 
 
 @app.post("/api/ask")
 async def ask_question(req: AskRequest):
-    """Ask a question about a video and get answer from transcript."""
+    """Ask a question about a video and get answer from transcript.
+
+    If llm config is provided, uses the LLM to generate a natural answer.
+    Otherwise falls back to keyword matching.
+    """
     try:
         segments = get_transcript(req.video_id)
     except RuntimeError as e:
@@ -242,9 +322,10 @@ async def ask_question(req: AskRequest):
         return {
             "answer": "I couldn't find specific information about that in the video transcript.",
             "sources": [],
+            "mode": "keyword",
         }
 
-    # Build answer from relevant chunks
+    # Build context from relevant chunks
     context_parts = []
     sources = []
     for chunk in relevant:
@@ -258,10 +339,37 @@ async def ask_question(req: AskRequest):
 
     context = "\n\n".join(context_parts)
 
+    # Try LLM if configured
+    if req.llm and req.llm.api_key:
+        try:
+            llm_answer = ask_llm(
+                req.question,
+                context,
+                {
+                    "api_key": req.llm.api_key,
+                    "base_url": req.llm.base_url,
+                    "model": req.llm.model,
+                },
+            )
+            if llm_answer:
+                return {
+                    "answer": llm_answer,
+                    "sources": sources,
+                    "mode": "llm",
+                }
+        except RuntimeError as e:
+            return {
+                "answer": f"⚠️ LLM error: {e}",
+                "sources": sources,
+                "mode": "llm_error",
+            }
+
+    # Fallback: return raw context
     return {
         "answer": context,
         "sources": sources,
         "found_chunks": len(relevant),
+        "mode": "keyword",
     }
 
 

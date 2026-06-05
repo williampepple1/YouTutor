@@ -411,6 +411,137 @@
     header { flex-direction: column; gap: 10px; }
     .search-box { max-width: 100%; }
   }
+
+  /* ── Settings Modal ──────────────────────────────────────────── */
+  .settings-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1;
+  }
+  .settings-btn:hover { background: var(--surface); color: var(--text); }
+  .settings-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.5);
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } }
+  .modal h2 {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal h2 small {
+    font-size: 0.75rem;
+    color: var(--text2);
+    font-weight: 400;
+  }
+  .modal label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--text2);
+    margin-bottom: 4px;
+    margin-top: 14px;
+  }
+  .modal input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal input:focus { border-color: var(--accent); }
+  .modal input::placeholder { color: var(--text2); }
+  .modal .hint {
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-top: 3px;
+  }
+  .modal .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .modal .actions button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .modal .actions button:active { transform: scale(0.97); }
+  .modal .actions .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .modal .actions .btn-primary:hover { background: #7c6df7; }
+  .modal .actions .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .modal .actions .btn-secondary:hover { background: var(--surface2); }
+  .modal .actions .btn-danger {
+    background: transparent;
+    color: #e74c3c;
+    border: 1px solid #e74c3c33;
+  }
+  .modal .actions .btn-danger:hover { background: #e74c3c11; }
+  .modal .status {
+    margin-top: 12px;
+    font-size: 0.82rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+  }
+  .modal .status.show { display: block; }
+  .modal .status.ok { background: #00cec922; color: #00cec9; }
+  .modal .status.err { background: #e74c3c22; color: #e74c3c; }
+  .modal .status.info { background: var(--surface); color: var(--text2); }
+
+  .mode-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .mode-badge.llm { background: #6c5ce722; color: var(--accent2); }
+  .mode-badge.keyword { background: var(--surface); color: var(--text2); }
+  .mode-badge.llm-error { background: #e74c3c22; color: #e74c3c; }
 </style>
 </head>
 <body>
@@ -418,6 +549,7 @@
 <!-- ── Header ──────────────────────────────────────────────────── -->
 <header>
   <h1>🎓 YouTutor</h1>
+  <button class="settings-btn" id="settingsBtn" title="Configure LLM API Key">⚙️</button>
   <div class="search-box">
     <input id="searchInput" type="text" placeholder="Search any topic to learn..." spellcheck="false"
            autocomplete="off" />
@@ -726,6 +858,196 @@ searchInput.addEventListener('keydown', e => {
 
 // Auto-focus search
 searchInput.focus();
+
+// ── Settings Modal ────────────────────────────────────────────────
+const defaultConfig = {
+  api_key: '',
+  base_url: 'https://api.deepseek.com',
+  model: 'deepseek-chat',
+};
+
+let llmConfig = { ...defaultConfig };
+
+// Load saved config
+try {
+  const saved = localStorage.getItem('yoututor_llm_config');
+  if (saved) llmConfig = { ...defaultConfig, ...JSON.parse(saved) };
+  if (llmConfig.api_key) document.getElementById('settingsBtn').classList.add('active');
+} catch(e) {}
+
+// Populate inputs
+function populateModal() {
+  document.getElementById('llmApiKey').value = llmConfig.api_key || '';
+  document.getElementById('llmBaseUrl').value = llmConfig.base_url || defaultConfig.base_url;
+  document.getElementById('llmModel').value = llmConfig.model || defaultConfig.model;
+}
+
+// Open modal
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  populateModal();
+  document.getElementById('settingsStatus').classList.remove('show');
+  document.getElementById('settingsModal').classList.add('active');
+});
+
+// Close on overlay click
+document.getElementById('settingsModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('settingsModal')) {
+    document.getElementById('settingsModal').classList.remove('active');
+  }
+});
+
+// Save
+document.getElementById('settingsSave').addEventListener('click', () => {
+  const apiKey = document.getElementById('llmApiKey').value.trim();
+  const baseUrl = document.getElementById('llmBaseUrl').value.trim() || defaultConfig.base_url;
+  const model = document.getElementById('llmModel').value.trim() || defaultConfig.model;
+  const status = document.getElementById('settingsStatus');
+
+  if (!apiKey) {
+    status.className = 'status show err';
+    status.textContent = 'Please enter an API key.';
+    return;
+  }
+
+  llmConfig = { api_key: apiKey, base_url: baseUrl, model };
+  localStorage.setItem('yoututor_llm_config', JSON.stringify(llmConfig));
+  document.getElementById('settingsBtn').classList.add('active');
+  status.className = 'status show ok';
+  status.textContent = '✅ API key saved! Answers will now use the LLM.';
+  setTimeout(() => document.getElementById('settingsModal').classList.remove('active'), 1200);
+});
+
+// Clear
+document.getElementById('settingsClear').addEventListener('click', () => {
+  llmConfig = { ...defaultConfig };
+  localStorage.removeItem('yoututor_llm_config');
+  document.getElementById('settingsBtn').classList.remove('active');
+  populateModal();
+  const status = document.getElementById('settingsStatus');
+  status.className = 'status show info';
+  status.textContent = 'Cleared. Falling back to keyword matching.';
+});
+
+// Test connection
+document.getElementById('settingsTest').addEventListener('click', async () => {
+  const apiKey = document.getElementById('llmApiKey').value.trim();
+  const baseUrl = document.getElementById('llmBaseUrl').value.trim() || defaultConfig.base_url;
+  const model = document.getElementById('llmModel').value.trim() || defaultConfig.model;
+  const status = document.getElementById('settingsStatus');
+
+  if (!apiKey) {
+    status.className = 'status show err';
+    status.textContent = 'Enter an API key first.';
+    return;
+  }
+
+  status.className = 'status show info';
+  status.textContent = '⏳ Testing connection...';
+
+  try {
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        video_id: 'test',
+        question: 'ping',
+        llm: { api_key: apiKey, base_url: baseUrl, model },
+      }),
+    });
+    const data = await res.json();
+    if (data.mode === 'llm' || data.mode === 'llm_error') {
+      if (data.answer && !data.answer.startsWith('⚠️')) {
+        status.className = 'status show ok';
+        status.textContent = '✅ Connected! LLM is working.';
+      } else {
+        status.className = 'status show err';
+        status.textContent = data.answer || 'Connection failed.';
+      }
+    } else {
+      status.className = 'status show err';
+      status.textContent = 'Unexpected response. Check your endpoint.';
+    }
+  } catch(e) {
+    status.className = 'status show err';
+    status.textContent = `Error: ${e.message}`;
+  }
+});
+
+// Update sendChat to include LLM config and show mode badge
+const _origSendChat = sendChat;
+sendChat = async function() {
+  const question = chatInput.value.trim();
+  if (!question || !state.currentVideoId) return;
+
+  chatPlaceholder.style.display = 'none';
+  addChatMessage(question, 'user');
+  chatInput.value = '';
+  chatSendBtn.disabled = true;
+
+  const typing = addChatMessage('Thinking...', 'typing');
+
+  try {
+    const body = { video_id: state.currentVideoId, question };
+    if (llmConfig.api_key) body.llm = llmConfig;
+
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+
+    typing.remove();
+
+    if (data.answer) {
+      const sourceHtml = (data.sources || []).map(s =>
+        `<span class="source-link" onclick="seekTo(${s.start})">⏱ ${s.timestamp}</span>`
+      ).join(' ');
+
+      const modeBadge = data.mode === 'llm' ? '<span class="mode-badge llm">🤖 LLM</span>'
+        : data.mode === 'llm_error' ? '<span class="mode-badge llm-error">⚠️ LLM Error</span>'
+        : '<span class="mode-badge keyword">📖 Keyword</span>';
+
+      addChatMessage(data.answer + '<br>' + modeBadge + (sourceHtml ? ' ' + sourceHtml : ''), 'assistant');
+    } else {
+      addChatMessage('Sorry, I couldn\'t find an answer in the transcript.', 'assistant');
+    }
+  } catch (e) {
+    typing.remove();
+    addChatMessage(`Error: ${e.message}`, 'assistant');
+  }
+
+  chatSendBtn.disabled = false;
+  scrollChat();
+};
 </script>
+
+<!-- ── Settings Modal ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h2>⚙️ LLM Settings <small>BYOK — Bring Your Own Key</small></h2>
+
+    <label for="llmApiKey">API Key</label>
+    <input id="llmApiKey" type="password" placeholder="sk-..." autocomplete="off" />
+    <div class="hint">Your key stays in your browser (localStorage). Never sent to our server.</div>
+
+    <label for="llmBaseUrl">API Base URL</label>
+    <input id="llmBaseUrl" type="text" placeholder="https://api.deepseek.com" autocomplete="off" />
+    <div class="hint">Default: <strong>https://api.deepseek.com</strong> — works with any OpenAI-compatible provider.</div>
+
+    <label for="llmModel">Model</label>
+    <input id="llmModel" type="text" placeholder="deepseek-chat" autocomplete="off" />
+    <div class="hint">Default: <strong>deepseek-chat</strong>. Examples: gpt-4o-mini, claude-sonnet-4, gemini-2.0-flash</div>
+
+    <div class="status" id="settingsStatus"></div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="settingsTest">🔌 Test</button>
+      <button class="btn-danger" id="settingsClear">Clear</button>
+      <button class="btn-primary" id="settingsSave">Save</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
