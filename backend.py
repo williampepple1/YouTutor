@@ -20,6 +20,9 @@ from pydantic import BaseModel
 import urllib.request as http_req
 import urllib.error as http_err
 import ssl
+import tempfile
+import base64
+import uuid
 import uvicorn
 
 # ── App setup ──────────────────────────────────────────────────────────────
@@ -63,19 +66,37 @@ def run_ytdlp(*args: str, timeout: int = 60) -> list[dict]:
 
 def get_transcript(video_id: str) -> list[dict]:
     """Fetch transcript segments for a video."""
-    try:
-        from youtube_transcript_api import YouTubeTranscriptApi
-        api = YouTubeTranscriptApi()
-        transcript = api.fetch(video_id, languages=['en'])
-        return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
-    except Exception as e:
-        # Try without language
+    from youtube_transcript_api import YouTubeTranscriptApi
+    api = YouTubeTranscriptApi()
+
+    # Try multiple strategies to get a transcript
+    strategies = [
+        ("English", lambda: api.fetch(video_id, languages=['en'])),
+        ("any language", lambda: api.fetch(video_id)),
+        ("English auto-generated", lambda: api.fetch(video_id, languages=['a.en'])),
+    ]
+
+    last_error = None
+    for label, fn in strategies:
         try:
-            api = YouTubeTranscriptApi()
-            transcript = api.fetch(video_id)
+            transcript = fn()
+            if transcript:
+                return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+        except Exception as e:
+            last_error = e
+            continue
+
+    # Last resort: list available transcripts and try the first one
+    try:
+        transcript_list = api.list(video_id)
+        first = transcript_list.find_transcript([t.language_code for t in transcript_list])
+        if first:
+            transcript = first.fetch()
             return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
-        except Exception as e2:
-            raise RuntimeError(f"Transcript unavailable: {e2}")
+    except Exception as e:
+        last_error = e
+
+    raise RuntimeError(f"Transcript unavailable: {last_error}")
 
 
 def chunk_transcript(segments: list[dict], chunk_size: int = 800) -> list[dict]:
@@ -245,6 +266,91 @@ def ask_llm(question: str, transcript_context: str, config: dict) -> str:
         raise RuntimeError(f"LLM API error: {e}")
 
 
+# ── Audio download & transcription ─────────────────────────────────
+
+AUDIO_DIR = HERE / "audio_cache"
+AUDIO_DIR.mkdir(exist_ok=True)
+
+
+def download_audio(video_id: str) -> Path:
+    """Download audio from a YouTube video and return the file path."""
+    output = AUDIO_DIR / f"{video_id}_{uuid.uuid4().hex[:8]}.mp3"
+    cmd = [
+        str(VENV_PYTHON), "-m", "yt_dlp",
+        "-x", "--audio-format", "mp3",
+        "--audio-quality", "0",  # best quality
+        "-o", str(output),
+        "--no-warnings",
+        f"https://www.youtube.com/watch?v={video_id}",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+    if result.returncode != 0 or not output.exists():
+        raise RuntimeError(f"Audio download failed: {result.stderr[:300]}")
+    return output
+
+
+def transcribe_audio(audio_path: Path, api_key: str) -> list[dict]:
+    """Transcribe audio using OpenAI Whisper API."""
+    import mimetypes
+    mime = mimetypes.guess_type(str(audio_path))[0] or "audio/mpeg"
+
+    boundary = uuid.uuid4().hex
+    filename = audio_path.name
+
+    # Build multipart form-data manually
+    with open(audio_path, "rb") as f:
+        audio_data = f.read()
+
+    body_parts = []
+    body_parts.append(f"--{boundary}\r\n"
+                      f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
+                      f"Content-Type: {mime}\r\n\r\n".encode())
+    body_parts.append(audio_data)
+    body_parts.append(f"\r\n--{boundary}\r\n"
+                      f'Content-Disposition: form-data; name="model"\r\n\r\n'
+                      f"whisper-1\r\n".encode())
+    body_parts.append(f"--{boundary}\r\n"
+                      f'Content-Disposition: form-data; name="response_format"\r\n\r\n'
+                      f"verbose_json\r\n".encode())
+    body_parts.append(f"\r\n--{boundary}--\r\n".encode())
+
+    body = b"".join(body_parts)
+
+    req = http_req.Request(
+        "https://api.openai.com/v1/audio/transcriptions",
+        data=body,
+        headers={
+            "Content-Type": f"multipart/form-data; boundary={boundary}",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
+
+    try:
+        ctx = ssl.create_default_context()
+        resp = http_req.urlopen(req, context=ctx, timeout=120)
+        result = json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        # Try to read the error body
+        error_body = ""
+        if hasattr(e, "read"):
+            try:
+                error_body = e.read().decode("utf-8")
+            except Exception:
+                pass
+        raise RuntimeError(f"Whisper API error: {e} {error_body}")
+
+    segments = result.get("segments", [])
+    return [
+        {
+            "text": s.get("text", "").strip(),
+            "start": s.get("start", 0),
+            "duration": s.get("end", s.get("start", 0)) - s.get("start", 0),
+        }
+        for s in segments
+    ]
+
+
 # ── API Routes ─────────────────────────────────────────────────────────────
 
 @app.get("/api/search")
@@ -383,6 +489,52 @@ async def ask_question(req: AskRequest):
         "sources": sources,
         "found_chunks": len(relevant),
         "mode": "keyword",
+    }
+
+
+class GenerateTranscriptRequest(BaseModel):
+    api_key: str = ""
+
+
+@app.post("/api/generate-transcript/{video_id}")
+async def generate_transcript(video_id: str, req: GenerateTranscriptRequest):
+    """Download audio and transcribe using OpenAI Whisper API."""
+    if not req.api_key:
+        raise HTTPException(status_code=400, detail="OpenAI API key required for audio transcription")
+
+    try:
+        audio_path = download_audio(video_id)
+    except RuntimeError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+    try:
+        segments = transcribe_audio(audio_path, req.api_key)
+    except RuntimeError as e:
+        # Clean up
+        if audio_path.exists():
+            audio_path.unlink()
+        raise HTTPException(status_code=502, detail=str(e))
+
+    # Clean up
+    if audio_path.exists():
+        audio_path.unlink()
+
+    full_text = " ".join(s["text"] for s in segments)
+
+    return {
+        "video_id": video_id,
+        "segments": [
+            {
+                "text": s["text"],
+                "start": s["start"],
+                "duration": s.get("duration", 0),
+                "timestamp": format_timestamp(s["start"]),
+            }
+            for s in segments
+        ],
+        "full_text": full_text,
+        "total_segments": len(segments),
+        "generated": True,
     }
 
 

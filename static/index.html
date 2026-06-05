@@ -541,6 +541,10 @@
     margin-left: auto;
   }
   .modal-close:hover { background: var(--surface); color: var(--text); }
+  .modal-divider {
+    border-top: 1px solid var(--border);
+    margin: 18px 0 6px;
+  }
   .modal .actions .btn-primary {
     background: var(--accent);
     color: white;
@@ -581,6 +585,22 @@
   .mode-badge.llm { background: #6c5ce722; color: var(--accent2); }
   .mode-badge.keyword { background: var(--surface); color: var(--text2); }
   .mode-badge.llm-error { background: #e74c3c22; color: #e74c3c; }
+  .gen-transcript-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .gen-transcript-btn:hover { background: #7c6df7; }
+  .gen-transcript-btn:active { transform: scale(0.97); }
+  .gen-transcript-btn:disabled { opacity: 0.5; cursor: wait; }
 </style>
 </head>
 <body>
@@ -835,12 +855,16 @@ async function loadVideo(videoId, title, channel) {
   try {
     const res = await fetch(`/api/transcript/${videoId}`);
     const data = await res.json();
+    if (!res.ok || data.detail) {
+      throw new Error(data.detail || `HTTP ${res.status}`);
+    }
     state.currentTranscript = data;
     renderTranscript(data.segments || []);
   } catch (e) {
     transcriptPlaceholder.innerHTML = `
-      <p>⚠️ No transcript available for this video.</p>
-      <p style="font-size:0.82rem;margin-top:6px;">Some videos don&#39;t have captions enabled.</p>
+      <p>⚠️ Transcript unavailable</p>
+      <p style="font-size:0.82rem;margin-top:6px;">${e.message}</p>
+      <button class="gen-transcript-btn" id="genTranscriptBtn" data-video="${videoId}">🎤 Generate transcript from audio</button>
     `;
     transcriptPlaceholder.style.display = 'block';
   }
@@ -972,6 +996,7 @@ const defaultConfig = {
   api_key: '',
   base_url: 'https://api.deepseek.com',
   model: 'deepseek-chat',
+  whisper_key: '',
 };
 
 let llmConfig = { ...defaultConfig };
@@ -988,6 +1013,7 @@ function populateModal() {
   document.getElementById('llmApiKey').value = llmConfig.api_key || '';
   document.getElementById('llmBaseUrl').value = llmConfig.base_url || defaultConfig.base_url;
   document.getElementById('llmModel').value = llmConfig.model || defaultConfig.model;
+  document.getElementById('whisperKey').value = llmConfig.whisper_key || '';
 }
 
 // Open modal
@@ -1014,6 +1040,7 @@ document.getElementById('settingsSave').addEventListener('click', () => {
   const apiKey = document.getElementById('llmApiKey').value.trim();
   const baseUrl = document.getElementById('llmBaseUrl').value.trim() || defaultConfig.base_url;
   const model = document.getElementById('llmModel').value.trim() || defaultConfig.model;
+  const whisperKey = document.getElementById('whisperKey').value.trim();
   const status = document.getElementById('settingsStatus');
 
   if (!apiKey) {
@@ -1022,7 +1049,7 @@ document.getElementById('settingsSave').addEventListener('click', () => {
     return;
   }
 
-  llmConfig = { api_key: apiKey, base_url: baseUrl, model };
+  llmConfig = { api_key: apiKey, base_url: baseUrl, model, whisper_key: whisperKey };
   localStorage.setItem('yoututor_llm_config', JSON.stringify(llmConfig));
   document.getElementById('settingsBtn').classList.add('active');
   status.className = 'status show ok';
@@ -1085,6 +1112,45 @@ document.getElementById('settingsTest').addEventListener('click', async () => {
     status.textContent = `Error: ${e.message}`;
   }
 }); // end settingsTest click
+
+// Generate transcript from audio (delegated — button is dynamically created)
+document.getElementById('transcriptPane').addEventListener('click', async (e) => {
+  const btn = e.target.closest('#genTranscriptBtn');
+  if (!btn) return;
+
+  const videoId = btn.dataset.video;
+  const whisperKey = (typeof llmConfig !== 'undefined') ? llmConfig.whisper_key : '';
+
+  if (!whisperKey) {
+    btn.textContent = '⚠️ Set an OpenAI key in ⚙️ settings first';
+    setTimeout(() => { btn.textContent = '🎤 Generate transcript from audio'; }, 3000);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Downloading audio...';
+
+  try {
+    const res = await fetch(`/api/generate-transcript/${videoId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: whisperKey }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.detail) {
+      throw new Error(data.detail || `HTTP ${res.status}`);
+    }
+
+    btn.textContent = '✅ Transcript generated!';
+    state.currentTranscript = data;
+    renderTranscript(data.segments || []);
+  } catch (err) {
+    btn.textContent = `❌ ${err.message.slice(0, 60)}`;
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = '🎤 Generate transcript from audio'; }, 4000);
+  }
+});
 }); // end DOMContentLoaded
 </script>
 
@@ -1106,6 +1172,12 @@ document.getElementById('settingsTest').addEventListener('click', async () => {
     <label for="llmModel">Model</label>
     <input id="llmModel" type="text" placeholder="deepseek-chat" autocomplete="off" />
     <div class="hint">Default: <strong>deepseek-chat</strong>. Examples: gpt-4o-mini, claude-sonnet-4, gemini-2.0-flash</div>
+
+    <div class="modal-divider"></div>
+
+    <label for="whisperKey">OpenAI API Key <small style="color:var(--text2)">(for audio transcription)</small></label>
+    <input id="whisperKey" type="password" placeholder="sk-... (optional)" autocomplete="off" />
+    <div class="hint">Only needed for videos without captions — enables on-the-fly transcription via Whisper API.</div>
 
     <div class="status" id="settingsStatus"></div>
 
