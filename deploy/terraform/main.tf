@@ -17,8 +17,12 @@ provider "aws" {
 }
 
 # ── S3 Bucket for frontend ────────────────────────────────────────
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${var.app_name}-${data.aws_caller_identity.current.account_id}"
+  bucket = "${var.app_name}-${data.aws_caller_identity.current.account_id}-${random_id.suffix.hex}"
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {
