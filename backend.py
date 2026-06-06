@@ -82,9 +82,18 @@ def get_transcript(video_id: str) -> list[dict]:
     for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
             url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            resp = http_req.urlopen(req, timeout=15)
-            body = resp.read().decode("utf-8", errors="replace")
+            # Use requests with SSL verification disabled if needed
+            try:
+                import requests as reqs
+                resp = reqs.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"}, verify=False)
+                body = resp.text
+            except ImportError:
+                req_ = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+                resp_ = http_req.urlopen(req_, context=ctx, timeout=15)
+                body = resp_.read().decode("utf-8", errors="replace")
             if body.strip() and body.strip() != "{}":
                 segments = parse_json3(body)
                 if segments:
