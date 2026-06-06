@@ -58,7 +58,7 @@ jobs:
         working-directory: deploy/terraform
         run: |
           terraform init
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var="use_cloudfront=false"
 
       - name: Upload Lambda zip to S3
         run: |
@@ -75,14 +75,16 @@ jobs:
           BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
           aws lambda update-function-code --function-name yoututor-backend --s3-bucket $BUCKET --s3-key lambda/lambda.zip
 
-      - name: Get CloudFront ID and invalidate
+      - name: Get CloudFront ID and invalidate (if deployed)
         run: |
           CF_ID=$(terraform -chdir=deploy/terraform output -raw cloudfront_id)
-          if [ -n "$CF_ID" ]; then
+          if [ -n "$CF_ID" ] && [ "$CF_ID" != "" ]; then
             aws cloudfront create-invalidation --distribution-id "$CF_ID" --paths "/*"
+            echo "CloudFront cache invalidated"
+          else
+            echo "CloudFront not deployed, skipping invalidation"
           fi
 
-      - name: Show deployment URL
+      - name: Show deployment URLs
         run: |
-          CF_URL=$(terraform -chdir=deploy/terraform output -raw cloudfront_url 2>/dev/null || echo "pending")
-          echo "🔗 Deployed at: $CF_URL"
+          terraform -chdir=deploy/terraform output

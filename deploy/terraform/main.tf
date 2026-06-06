@@ -34,6 +34,7 @@ resource "aws_s3_bucket_public_access_block" "frontend" {
 }
 
 resource "aws_s3_bucket_policy" "frontend" {
+  count  = var.use_cloudfront ? 1 : 0
   bucket = aws_s3_bucket.frontend.id
   policy = jsonencode({
     Version = "2008-10-17"
@@ -45,7 +46,7 @@ resource "aws_s3_bucket_policy" "frontend" {
       Resource  = "${aws_s3_bucket.frontend.arn}/*"
       Condition = {
         StringEquals = {
-          "AWS:SourceArn" = aws_cloudfront_distribution.main.arn
+          "AWS:SourceArn" = aws_cloudfront_distribution.main[0].arn
         }
       }
     }]
@@ -156,8 +157,14 @@ resource "aws_lambda_permission" "apigw" {
 #   }
 # }
 
-# ── CloudFront Distribution ───────────────────────────────────────
+# ── CloudFront Distribution (optional — requires AWS account verification) ─
+resource "aws_cloudfront_origin_access_identity" "main" {
+  count     = var.use_cloudfront ? 1 : 0
+  comment   = "${var.app_name} OAI"
+}
+
 resource "aws_cloudfront_distribution" "main" {
+  count       = var.use_cloudfront ? 1 : 0
   enabled     = true
   price_class = "PriceClass_100"
   aliases     = var.domain_name != "" ? [var.domain_name] : []
@@ -165,9 +172,8 @@ resource "aws_cloudfront_distribution" "main" {
   origin {
     domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
     origin_id   = "S3Frontend"
-    # CloudFront OAC would be better, but OAI works for simplicity
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.main[0].cloudfront_access_identity_path
     }
   }
 
@@ -242,15 +248,19 @@ data "aws_caller_identity" "current" {}
 
 # ── Outputs ───────────────────────────────────────────────────────
 output "cloudfront_url" {
-  value = "https://${aws_cloudfront_distribution.main.domain_name}"
+  value = var.use_cloudfront ? "https://${aws_cloudfront_distribution.main[0].domain_name}" : "CloudFront not deployed (set use_cloudfront=true after AWS account verification)"
 }
 
 output "cloudfront_id" {
-  value = aws_cloudfront_distribution.main.id
+  value = var.use_cloudfront ? aws_cloudfront_distribution.main[0].id : ""
 }
 
 output "api_url" {
   value = aws_apigatewayv2_api.main.api_endpoint
+}
+
+output "frontend_url" {
+  value = "https://${aws_s3_bucket.frontend.bucket_regional_domain_name}"
 }
 
 output "s3_bucket" {

@@ -27,3 +27,9 @@ variable "domain_name" {
   type        = string
   default     = ""
 }
+
+variable "use_cloudfront" {
+  description = "Whether to create a CloudFront distribution (requires AWS account verification)"
+  type        = bool
+  default     = false
+}
