@@ -10,6 +10,11 @@ terraform {
       version = "~> 3.0"
     }
   }
+  backend "s3" {
+    bucket = "yoututor-terraform-state-628711466156"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
@@ -17,12 +22,9 @@ provider "aws" {
 }
 
 # ── S3 Bucket for frontend ────────────────────────────────────────
-resource "random_id" "suffix" {
-  byte_length = 4
-}
-
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${var.app_name}-${data.aws_caller_identity.current.account_id}-${random_id.suffix.hex}"
+  bucket = "${var.app_name}-${data.aws_caller_identity.current.account_id}"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {
