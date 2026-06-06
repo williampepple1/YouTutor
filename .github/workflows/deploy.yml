@@ -39,52 +39,47 @@ jobs:
 
       - name: Build Lambda deployment package
         run: |
-          # Create a deployment directory
           mkdir -p build
-          
-          # Copy application code
           cp -r backend.py deploy build/
           cp -r deploy/lambda/handler.py build/deploy/lambda/
-          
-          # Install dependencies into build
           pip install -r requirements.txt -t build/
           pip install mangum -t build/
-          
-          # Clean up unnecessary files
           cd build
           find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-          find . -type d -name "*.dist-info" -exec rm -rf {} + 2>/dev/null || true
-          
-          # Create the zip
           zip -r ../deploy/lambda.zip . -x ".*" > /dev/null 2>&1
           cd ..
-
-      - name: Upload Lambda zip to S3
-        run: |
-          aws s3 cp deploy/lambda.zip s3://${{ env.APP_NAME }}-${{ secrets.AWS_ACCOUNT_ID }}/lambda/lambda.zip
-
-      - name: Deploy frontend to S3
-        run: |
-          aws s3 sync static/ s3://${{ env.APP_NAME }}-${{ secrets.AWS_ACCOUNT_ID }}/ --delete
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.14.8"
 
-      - name: Terraform Init
+      - name: Terraform Init & Apply
         working-directory: deploy/terraform
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: deploy/terraform
-        run: terraform apply -auto-approve
-
-      - name: Invalidate CloudFront
         run: |
-          DIST_ID=$(terraform -chdir=deploy/terraform output -raw cloudfront_id 2>/dev/null || aws cloudfront list-distributions --query "DistributionList.Items[?contains(Origins.Items[].DomainName, '$(aws s3api list-buckets --query "Buckets[?contains(Name, '${{ env.APP_NAME }}')].Name" --output text)')].Id" --output text)
-          if [ -n "$DIST_ID" ]; then
-            aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
+          terraform init
+          terraform apply -auto-approve
+
+      - name: Upload Lambda zip to S3
+        run: |
+          BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
+          aws s3 cp deploy/lambda.zip s3://$BUCKET/lambda/lambda.zip
+
+      - name: Deploy frontend to S3
+        run: |
+          BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
+          aws s3 sync static/ s3://$BUCKET/ --delete
+
+      - name: Update Lambda code
+        run: |
+          BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
+          aws lambda update-function-code --function-name yoututor-backend --s3-bucket $BUCKET --s3-key lambda/lambda.zip
+
+      - name: Get CloudFront ID and invalidate
+        run: |
+          CF_ID=$(terraform -chdir=deploy/terraform output -raw cloudfront_id)
+          if [ -n "$CF_ID" ]; then
+            aws cloudfront create-invalidation --distribution-id "$CF_ID" --paths "/*"
           fi
 
       - name: Show deployment URL
