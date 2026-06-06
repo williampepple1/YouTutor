@@ -188,7 +188,9 @@ resource "aws_cloudfront_distribution" "main" {
     max_ttl                = 86400
     forwarded_values {
       query_string = false
-      cookies      = { forward = "none" }
+      cookies {
+        forward = "none"
+      }
     }
   }
 
@@ -204,7 +206,9 @@ resource "aws_cloudfront_distribution" "main" {
     forwarded_values {
       query_string = true
       headers      = ["*"]
-      cookies      = { forward = "all" }
+      cookies {
+        forward = "all"
+      }
     }
   }
 
