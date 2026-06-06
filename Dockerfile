@@ -2,11 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install runtime deps (yt-dlp needs ffmpeg for some features)
+# Fix SSL issues: upgrade OpenSSL and CA certificates
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg \
-    curl \
+    openssl \
     ca-certificates \
+    curl \
+    ffmpeg \
+    && update-ca-certificates --fresh \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python deps

@@ -1,0 +1,2480 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.120 --> 00:00:02.090 align:start position:0%
+ 
+hey<00:00:00.539><c> what's</c><00:00:00.780><c> going</c><00:00:00.960><c> on</c><00:00:01.079><c> everybody</c><00:00:01.319><c> in</c><00:00:01.920><c> this</c>
+
+00:00:02.090 --> 00:00:02.100 align:start position:0%
+hey what's going on everybody in this
+ 
+
+00:00:02.100 --> 00:00:04.730 align:start position:0%
+hey what's going on everybody in this
+topic<00:00:02.460><c> I'm</c><00:00:02.760><c> going</c><00:00:02.940><c> to</c><00:00:03.060><c> explain</c><00:00:03.440><c> variables</c><00:00:04.440><c> and</c>
+
+00:00:04.730 --> 00:00:04.740 align:start position:0%
+topic I'm going to explain variables and
+ 
+
+00:00:04.740 --> 00:00:07.130 align:start position:0%
+topic I'm going to explain variables and
+data<00:00:05.100><c> types</c><00:00:05.400><c> in</c><00:00:05.640><c> python</c><00:00:06.120><c> as</c><00:00:06.480><c> well</c><00:00:06.600><c> as</c><00:00:06.720><c> give</c><00:00:06.960><c> you</c>
+
+00:00:07.130 --> 00:00:07.140 align:start position:0%
+data types in python as well as give you
+ 
+
+00:00:07.140 --> 00:00:09.290 align:start position:0%
+data types in python as well as give you
+a<00:00:07.379><c> few</c><00:00:07.500><c> useful</c><00:00:07.919><c> tips</c><00:00:08.340><c> and</c><00:00:08.519><c> tricks</c><00:00:08.880><c> at</c><00:00:09.120><c> the</c><00:00:09.240><c> end</c>
+
+00:00:09.290 --> 00:00:09.300 align:start position:0%
+a few useful tips and tricks at the end
+ 
+
+00:00:09.300 --> 00:00:11.570 align:start position:0%
+a few useful tips and tricks at the end
+of<00:00:09.480><c> this</c><00:00:09.599><c> topic</c><00:00:09.960><c> so</c><00:00:10.320><c> why</c><00:00:10.620><c> don't</c><00:00:10.800><c> you</c><00:00:10.980><c> sit</c><00:00:11.280><c> back</c>
+
+00:00:11.570 --> 00:00:11.580 align:start position:0%
+of this topic so why don't you sit back
+ 
+
+00:00:11.580 --> 00:00:15.530 align:start position:0%
+of this topic so why don't you sit back
+relax<00:00:12.120><c> and</c><00:00:12.840><c> enjoy</c><00:00:13.139><c> the</c><00:00:13.320><c> show</c>
+
+00:00:15.530 --> 00:00:15.540 align:start position:0%
+ 
+ 
+
+00:00:15.540 --> 00:00:18.290 align:start position:0%
+ 
+let's<00:00:15.960><c> talk</c><00:00:16.139><c> about</c><00:00:16.260><c> variables</c><00:00:16.980><c> a</c><00:00:17.520><c> variable</c><00:00:17.880><c> is</c>
+
+00:00:18.290 --> 00:00:18.300 align:start position:0%
+let's talk about variables a variable is
+ 
+
+00:00:18.300 --> 00:00:20.750 align:start position:0%
+let's talk about variables a variable is
+a<00:00:18.600><c> reusable</c><00:00:19.020><c> container</c><00:00:19.619><c> for</c><00:00:19.980><c> storing</c><00:00:20.340><c> a</c><00:00:20.520><c> value</c>
+
+00:00:20.750 --> 00:00:20.760 align:start position:0%
+a reusable container for storing a value
+ 
+
+00:00:20.760 --> 00:00:23.390 align:start position:0%
+a reusable container for storing a value
+a<00:00:21.300><c> variable</c><00:00:21.660><c> behaves</c><00:00:22.439><c> as</c><00:00:22.740><c> if</c><00:00:22.920><c> it</c><00:00:23.100><c> were</c><00:00:23.220><c> the</c>
+
+00:00:23.390 --> 00:00:23.400 align:start position:0%
+a variable behaves as if it were the
+ 
+
+00:00:23.400 --> 00:00:25.910 align:start position:0%
+a variable behaves as if it were the
+value<00:00:23.640><c> it</c><00:00:23.939><c> contains</c><00:00:24.300><c> think</c><00:00:24.779><c> back</c><00:00:25.080><c> to</c><00:00:25.380><c> algebra</c>
+
+00:00:25.910 --> 00:00:25.920 align:start position:0%
+value it contains think back to algebra
+ 
+
+00:00:25.920 --> 00:00:27.470 align:start position:0%
+value it contains think back to algebra
+class<00:00:26.160><c> back</c><00:00:26.519><c> in</c><00:00:26.640><c> the</c><00:00:26.760><c> day</c><00:00:26.880><c> we</c><00:00:27.240><c> have</c><00:00:27.359><c> an</c>
+
+00:00:27.470 --> 00:00:27.480 align:start position:0%
+class back in the day we have an
+ 
+
+00:00:27.480 --> 00:00:30.109 align:start position:0%
+class back in the day we have an
+equation<00:00:27.779><c> that</c><00:00:28.199><c> contains</c><00:00:28.560><c> x</c><00:00:28.920><c> x</c><00:00:29.460><c> is</c><00:00:29.820><c> some</c>
+
+00:00:30.109 --> 00:00:30.119 align:start position:0%
+equation that contains x x is some
+ 
+
+00:00:30.119 --> 00:00:32.389 align:start position:0%
+equation that contains x x is some
+representation<00:00:30.779><c> of</c><00:00:31.080><c> a</c><00:00:31.260><c> value</c><00:00:31.439><c> wherever</c><00:00:32.160><c> we</c>
+
+00:00:32.389 --> 00:00:32.399 align:start position:0%
+representation of a value wherever we
+ 
+
+00:00:32.399 --> 00:00:35.150 align:start position:0%
+representation of a value wherever we
+use<00:00:32.640><c> x</c><00:00:32.940><c> it</c><00:00:33.480><c> behaves</c><00:00:33.899><c> as</c><00:00:34.200><c> if</c><00:00:34.380><c> it</c><00:00:34.559><c> were</c><00:00:34.680><c> a</c><00:00:34.980><c> certain</c>
+
+00:00:35.150 --> 00:00:35.160 align:start position:0%
+use x it behaves as if it were a certain
+ 
+
+00:00:35.160 --> 00:00:36.470 align:start position:0%
+use x it behaves as if it were a certain
+number<00:00:35.399><c> that's</c><00:00:35.760><c> kind</c><00:00:36.000><c> of</c><00:00:36.120><c> the</c><00:00:36.239><c> same</c><00:00:36.360><c> thing</c>
+
+00:00:36.470 --> 00:00:36.480 align:start position:0%
+number that's kind of the same thing
+ 
+
+00:00:36.480 --> 00:00:38.330 align:start position:0%
+number that's kind of the same thing
+with<00:00:36.719><c> programming</c><00:00:37.260><c> now</c><00:00:37.559><c> when</c><00:00:37.800><c> we</c><00:00:37.980><c> create</c><00:00:38.160><c> a</c>
+
+00:00:38.330 --> 00:00:38.340 align:start position:0%
+with programming now when we create a
+ 
+
+00:00:38.340 --> 00:00:39.950 align:start position:0%
+with programming now when we create a
+variable<00:00:38.640><c> we</c><00:00:39.000><c> would</c><00:00:39.120><c> like</c><00:00:39.300><c> to</c><00:00:39.420><c> give</c><00:00:39.600><c> a</c>
+
+00:00:39.950 --> 00:00:39.960 align:start position:0%
+variable we would like to give a
+ 
+
+00:00:39.960 --> 00:00:41.930 align:start position:0%
+variable we would like to give a
+descriptive<00:00:40.440><c> and</c><00:00:40.680><c> unique</c><00:00:41.040><c> name</c><00:00:41.219><c> of</c><00:00:41.579><c> what</c><00:00:41.820><c> that</c>
+
+00:00:41.930 --> 00:00:41.940 align:start position:0%
+descriptive and unique name of what that
+ 
+
+00:00:41.940 --> 00:00:43.850 align:start position:0%
+descriptive and unique name of what that
+variable<00:00:42.300><c> contains</c><00:00:42.840><c> suppose</c><00:00:43.440><c> I'm</c><00:00:43.620><c> working</c>
+
+00:00:43.850 --> 00:00:43.860 align:start position:0%
+variable contains suppose I'm working
+ 
+
+00:00:43.860 --> 00:00:46.610 align:start position:0%
+variable contains suppose I'm working
+with<00:00:44.160><c> a</c><00:00:44.280><c> user's</c><00:00:44.760><c> Edge</c><00:00:44.940><c> I</c><00:00:45.480><c> could</c><00:00:45.660><c> declare</c><00:00:46.140><c> a</c>
+
+00:00:46.610 --> 00:00:46.620 align:start position:0%
+with a user's Edge I could declare a
+ 
+
+00:00:46.620 --> 00:00:50.029 align:start position:0%
+with a user's Edge I could declare a
+variable<00:00:46.920><c> named</c><00:00:47.579><c> age</c><00:00:47.820><c> age</c><00:00:48.480><c> equals</c><00:00:49.379><c> then</c><00:00:49.739><c> some</c>
+
+00:00:50.029 --> 00:00:50.039 align:start position:0%
+variable named age age equals then some
+ 
+
+00:00:50.039 --> 00:00:52.610 align:start position:0%
+variable named age age equals then some
+value<00:00:50.280><c> let's</c><00:00:50.760><c> say</c><00:00:50.940><c> my</c><00:00:51.180><c> age</c><00:00:51.360><c> is</c><00:00:51.539><c> 21</c><00:00:51.780><c> not</c><00:00:52.440><c> anymore</c>
+
+00:00:52.610 --> 00:00:52.620 align:start position:0%
+value let's say my age is 21 not anymore
+ 
+
+00:00:52.620 --> 00:00:54.709 align:start position:0%
+value let's say my age is 21 not anymore
+but<00:00:52.980><c> I</c><00:00:53.160><c> like</c><00:00:53.219><c> to</c><00:00:53.399><c> think</c><00:00:53.520><c> it</c><00:00:53.700><c> still</c><00:00:53.879><c> is</c><00:00:54.059><c> guys</c><00:00:54.480><c> I'm</c>
+
+00:00:54.709 --> 00:00:54.719 align:start position:0%
+but I like to think it still is guys I'm
+ 
+
+00:00:54.719 --> 00:00:56.930 align:start position:0%
+but I like to think it still is guys I'm
+getting<00:00:54.899><c> old</c><00:00:55.079><c> I</c><00:00:55.559><c> can</c><00:00:55.739><c> use</c><00:00:55.980><c> this</c><00:00:56.219><c> variable</c><00:00:56.579><c> age</c>
+
+00:00:56.930 --> 00:00:56.940 align:start position:0%
+getting old I can use this variable age
+ 
+
+00:00:56.940 --> 00:00:59.270 align:start position:0%
+getting old I can use this variable age
+and<00:00:57.480><c> it</c><00:00:57.660><c> will</c><00:00:57.780><c> behave</c><00:00:58.199><c> as</c><00:00:58.620><c> if</c><00:00:58.739><c> it</c><00:00:58.920><c> were</c><00:00:59.100><c> the</c>
+
+00:00:59.270 --> 00:00:59.280 align:start position:0%
+and it will behave as if it were the
+ 
+
+00:00:59.280 --> 00:01:01.490 align:start position:0%
+and it will behave as if it were the
+number<00:00:59.460><c> 21.</c><00:01:00.180><c> to</c><00:01:00.480><c> print</c><00:01:00.600><c> a</c><00:01:00.780><c> variable</c><00:01:01.079><c> you</c><00:01:01.379><c> can</c>
+
+00:01:01.490 --> 00:01:01.500 align:start position:0%
+number 21. to print a variable you can
+ 
+
+00:01:01.500 --> 00:01:03.590 align:start position:0%
+number 21. to print a variable you can
+place<00:01:01.620><c> it</c><00:01:01.860><c> within</c><00:01:02.160><c> a</c><00:01:02.280><c> print</c><00:01:02.399><c> statement</c>
+
+00:01:03.590 --> 00:01:03.600 align:start position:0%
+place it within a print statement
+ 
+
+00:01:03.600 --> 00:01:05.810 align:start position:0%
+place it within a print statement
+print<00:01:04.320><c> age</c>
+
+00:01:05.810 --> 00:01:05.820 align:start position:0%
+print age
+ 
+
+00:01:05.820 --> 00:01:08.450 align:start position:0%
+print age
+my<00:01:06.420><c> age</c><00:01:06.600><c> is</c><00:01:06.960><c> 21.</c><00:01:07.560><c> if</c><00:01:07.799><c> you're</c><00:01:07.979><c> printing</c><00:01:08.340><c> a</c>
+
+00:01:08.450 --> 00:01:08.460 align:start position:0%
+my age is 21. if you're printing a
+ 
+
+00:01:08.460 --> 00:01:10.190 align:start position:0%
+my age is 21. if you're printing a
+variable<00:01:08.760><c> you</c><00:01:09.180><c> don't</c><00:01:09.299><c> need</c><00:01:09.479><c> to</c><00:01:09.600><c> put</c><00:01:09.720><c> it</c><00:01:09.840><c> within</c>
+
+00:01:10.190 --> 00:01:10.200 align:start position:0%
+variable you don't need to put it within
+ 
+
+00:01:10.200 --> 00:01:11.330 align:start position:0%
+variable you don't need to put it within
+quotes
+
+00:01:11.330 --> 00:01:11.340 align:start position:0%
+quotes
+ 
+
+00:01:11.340 --> 00:01:12.950 align:start position:0%
+quotes
+because<00:01:11.700><c> what</c><00:01:12.000><c> we're</c><00:01:12.119><c> doing</c><00:01:12.299><c> then</c><00:01:12.540><c> is</c>
+
+00:01:12.950 --> 00:01:12.960 align:start position:0%
+because what we're doing then is
+ 
+
+00:01:12.960 --> 00:01:15.170 align:start position:0%
+because what we're doing then is
+literally<00:01:13.439><c> printing</c><00:01:14.040><c> the</c><00:01:14.220><c> word</c><00:01:14.340><c> age</c><00:01:14.640><c> and</c><00:01:15.000><c> not</c>
+
+00:01:15.170 --> 00:01:15.180 align:start position:0%
+literally printing the word age and not
+ 
+
+00:01:15.180 --> 00:01:17.090 align:start position:0%
+literally printing the word age and not
+the<00:01:15.360><c> variable</c><00:01:15.659><c> if</c><00:01:16.140><c> you</c><00:01:16.260><c> need</c><00:01:16.380><c> to</c><00:01:16.500><c> display</c><00:01:16.740><c> a</c>
+
+00:01:17.090 --> 00:01:17.100 align:start position:0%
+the variable if you need to display a
+ 
+
+00:01:17.100 --> 00:01:19.990 align:start position:0%
+the variable if you need to display a
+variable<00:01:17.400><c> along</c><00:01:18.000><c> with</c><00:01:18.299><c> some</c><00:01:18.479><c> text</c><00:01:18.720><c> such</c><00:01:19.380><c> as</c>
+
+00:01:19.990 --> 00:01:20.000 align:start position:0%
+variable along with some text such as
+ 
+
+00:01:20.000 --> 00:01:24.590 align:start position:0%
+variable along with some text such as
+you<00:01:21.000><c> are</c><00:01:21.600><c> age</c><00:01:22.380><c> years</c><00:01:22.979><c> old</c><00:01:23.460><c> what</c><00:01:24.180><c> we</c><00:01:24.299><c> could</c><00:01:24.420><c> do</c>
+
+00:01:24.590 --> 00:01:24.600 align:start position:0%
+you are age years old what we could do
+ 
+
+00:01:24.600 --> 00:01:26.749 align:start position:0%
+you are age years old what we could do
+is<00:01:24.840><c> shrink</c><00:01:25.140><c> concatenation</c><00:01:25.799><c> wherever</c><00:01:26.580><c> you</c>
+
+00:01:26.749 --> 00:01:26.759 align:start position:0%
+is shrink concatenation wherever you
+ 
+
+00:01:26.759 --> 00:01:28.490 align:start position:0%
+is shrink concatenation wherever you
+would<00:01:26.880><c> like</c><00:01:27.000><c> to</c><00:01:27.119><c> include</c><00:01:27.420><c> a</c><00:01:27.600><c> variable</c><00:01:27.900><c> let's</c>
+
+00:01:28.490 --> 00:01:28.500 align:start position:0%
+would like to include a variable let's
+ 
+
+00:01:28.500 --> 00:01:31.670 align:start position:0%
+would like to include a variable let's
+say<00:01:28.680><c> here</c><00:01:28.920><c> where</c><00:01:29.340><c> ages</c><00:01:29.820><c> we</c><00:01:30.420><c> can</c><00:01:30.540><c> separate</c><00:01:31.080><c> this</c>
+
+00:01:31.670 --> 00:01:31.680 align:start position:0%
+say here where ages we can separate this
+ 
+
+00:01:31.680 --> 00:01:34.910 align:start position:0%
+say here where ages we can separate this
+line<00:01:31.860><c> of</c><00:01:32.100><c> text</c><00:01:32.340><c> into</c><00:01:32.880><c> different</c><00:01:33.299><c> strings</c><00:01:33.920><c> you</c>
+
+00:01:34.910 --> 00:01:34.920 align:start position:0%
+line of text into different strings you
+ 
+
+00:01:34.920 --> 00:01:36.350 align:start position:0%
+line of text into different strings you
+are
+
+00:01:36.350 --> 00:01:36.360 align:start position:0%
+are
+ 
+
+00:01:36.360 --> 00:01:41.510 align:start position:0%
+are
+plus<00:01:37.140><c> age</c><00:01:37.640><c> plus</c><00:01:38.640><c> the</c><00:01:39.000><c> text</c><00:01:39.240><c> years</c><00:01:39.840><c> old</c>
+
+00:01:41.510 --> 00:01:41.520 align:start position:0%
+plus age plus the text years old
+ 
+
+00:01:41.520 --> 00:01:43.670 align:start position:0%
+plus age plus the text years old
+so<00:01:41.820><c> we</c><00:01:41.939><c> do</c><00:01:42.060><c> have</c><00:01:42.180><c> an</c><00:01:42.360><c> error</c><00:01:42.600><c> here</c><00:01:42.780><c> type</c><00:01:43.200><c> error</c>
+
+00:01:43.670 --> 00:01:43.680 align:start position:0%
+so we do have an error here type error
+ 
+
+00:01:43.680 --> 00:01:46.069 align:start position:0%
+so we do have an error here type error
+can<00:01:43.860><c> only</c><00:01:43.979><c> concatenate</c><00:01:44.759><c> string</c><00:01:45.299><c> not</c><00:01:45.780><c> into</c>
+
+00:01:46.069 --> 00:01:46.079 align:start position:0%
+can only concatenate string not into
+ 
+
+00:01:46.079 --> 00:01:48.770 align:start position:0%
+can only concatenate string not into
+Strings<00:01:46.680><c> we</c><00:01:47.340><c> can't</c><00:01:47.520><c> add</c><00:01:47.820><c> numbers</c><00:01:48.119><c> to</c><00:01:48.479><c> Strings</c>
+
+00:01:48.770 --> 00:01:48.780 align:start position:0%
+Strings we can't add numbers to Strings
+ 
+
+00:01:48.780 --> 00:01:50.389 align:start position:0%
+Strings we can't add numbers to Strings
+directly<00:01:49.259><c> we</c><00:01:49.560><c> would</c><00:01:49.680><c> need</c><00:01:49.860><c> to</c><00:01:49.979><c> do</c><00:01:50.100><c> what</c><00:01:50.280><c> is</c>
+
+00:01:50.389 --> 00:01:50.399 align:start position:0%
+directly we would need to do what is
+ 
+
+00:01:50.399 --> 00:01:52.429 align:start position:0%
+directly we would need to do what is
+called<00:01:50.520><c> typecasting</c><00:01:51.360><c> to</c><00:01:51.720><c> display</c><00:01:51.899><c> a</c><00:01:52.259><c> number</c>
+
+00:01:52.429 --> 00:01:52.439 align:start position:0%
+called typecasting to display a number
+ 
+
+00:01:52.439 --> 00:01:55.010 align:start position:0%
+called typecasting to display a number
+along<00:01:52.860><c> with</c><00:01:53.100><c> subtext</c><00:01:53.520><c> we</c><00:01:54.000><c> would</c><00:01:54.119><c> need</c><00:01:54.360><c> to</c><00:01:54.659><c> cast</c>
+
+00:01:55.010 --> 00:01:55.020 align:start position:0%
+along with subtext we would need to cast
+ 
+
+00:01:55.020 --> 00:01:57.770 align:start position:0%
+along with subtext we would need to cast
+this<00:01:55.619><c> variable</c><00:01:55.979><c> which</c><00:01:56.759><c> is</c><00:01:56.939><c> a</c><00:01:57.119><c> number</c><00:01:57.240><c> into</c>
+
+00:01:57.770 --> 00:01:57.780 align:start position:0%
+this variable which is a number into
+ 
+
+00:01:57.780 --> 00:02:00.590 align:start position:0%
+this variable which is a number into
+text<00:01:58.140><c> a</c><00:01:58.680><c> string</c><00:01:58.979><c> to</c><00:01:59.280><c> do</c><00:01:59.399><c> that</c><00:01:59.520><c> we</c><00:01:59.880><c> can</c><00:02:00.000><c> precede</c>
+
+00:02:00.590 --> 00:02:00.600 align:start position:0%
+text a string to do that we can precede
+ 
+
+00:02:00.600 --> 00:02:03.889 align:start position:0%
+text a string to do that we can precede
+the<00:02:00.720><c> variable</c><00:02:01.079><c> name</c><00:02:01.320><c> with</c><00:02:01.920><c> s</c><00:02:02.820><c> t</c><00:02:03.119><c> r</c><00:02:03.420><c> then</c>
+
+00:02:03.889 --> 00:02:03.899 align:start position:0%
+the variable name with s t r then
+ 
+
+00:02:03.899 --> 00:02:05.389 align:start position:0%
+the variable name with s t r then
+surround<00:02:04.259><c> the</c><00:02:04.380><c> variable</c><00:02:04.680><c> with</c><00:02:04.979><c> a</c><00:02:05.100><c> set</c><00:02:05.280><c> of</c>
+
+00:02:05.389 --> 00:02:05.399 align:start position:0%
+surround the variable with a set of
+ 
+
+00:02:05.399 --> 00:02:07.310 align:start position:0%
+surround the variable with a set of
+parentheses
+
+00:02:07.310 --> 00:02:07.320 align:start position:0%
+parentheses
+ 
+
+00:02:07.320 --> 00:02:09.350 align:start position:0%
+parentheses
+if<00:02:07.740><c> I</c><00:02:07.920><c> were</c><00:02:08.039><c> to</c><00:02:08.099><c> run</c><00:02:08.280><c> this</c><00:02:08.459><c> again</c><00:02:08.640><c> this</c><00:02:09.179><c> will</c>
+
+00:02:09.350 --> 00:02:09.360 align:start position:0%
+if I were to run this again this will
+ 
+
+00:02:09.360 --> 00:02:13.250 align:start position:0%
+if I were to run this again this will
+display<00:02:09.920><c> you</c><00:02:10.920><c> are</c><00:02:11.220><c> 21</c><00:02:11.640><c> years</c><00:02:12.120><c> old</c><00:02:12.360><c> but</c><00:02:13.020><c> you</c><00:02:13.200><c> do</c>
+
+00:02:13.250 --> 00:02:13.260 align:start position:0%
+display you are 21 years old but you do
+ 
+
+00:02:13.260 --> 00:02:15.650 align:start position:0%
+display you are 21 years old but you do
+have<00:02:13.440><c> to</c><00:02:13.620><c> pay</c><00:02:13.800><c> attention</c><00:02:14.099><c> to</c><00:02:14.340><c> your</c><00:02:14.520><c> spaces</c><00:02:15.000><c> I'm</c>
+
+00:02:15.650 --> 00:02:15.660 align:start position:0%
+have to pay attention to your spaces I'm
+ 
+
+00:02:15.660 --> 00:02:18.949 align:start position:0%
+have to pay attention to your spaces I'm
+going<00:02:15.900><c> to</c><00:02:16.080><c> add</c><00:02:16.500><c> a</c><00:02:16.920><c> space</c><00:02:17.099><c> after</c><00:02:17.459><c> r</c><00:02:17.940><c> as</c><00:02:18.599><c> well</c><00:02:18.720><c> as</c>
+
+00:02:18.949 --> 00:02:18.959 align:start position:0%
+going to add a space after r as well as
+ 
+
+00:02:18.959 --> 00:02:22.070 align:start position:0%
+going to add a space after r as well as
+before<00:02:19.200><c> the</c><00:02:19.620><c> word</c><00:02:19.739><c> years</c><00:02:20.040><c> run</c><00:02:20.819><c> this</c><00:02:21.060><c> again</c><00:02:21.239><c> you</c>
+
+00:02:22.070 --> 00:02:22.080 align:start position:0%
+before the word years run this again you
+ 
+
+00:02:22.080 --> 00:02:24.770 align:start position:0%
+before the word years run this again you
+are<00:02:22.379><c> 21</c><00:02:22.739><c> years</c><00:02:23.220><c> old</c><00:02:23.459><c> another</c><00:02:24.120><c> way</c><00:02:24.420><c> to</c><00:02:24.599><c> display</c>
+
+00:02:24.770 --> 00:02:24.780 align:start position:0%
+are 21 years old another way to display
+ 
+
+00:02:24.780 --> 00:02:27.290 align:start position:0%
+are 21 years old another way to display
+a<00:02:25.140><c> variable</c><00:02:25.440><c> along</c><00:02:25.739><c> with</c><00:02:25.980><c> some</c><00:02:26.220><c> text</c><00:02:26.459><c> is</c><00:02:27.060><c> to</c>
+
+00:02:27.290 --> 00:02:27.300 align:start position:0%
+a variable along with some text is to
+ 
+
+00:02:27.300 --> 00:02:29.449 align:start position:0%
+a variable along with some text is to
+separate<00:02:27.660><c> the</c><00:02:28.020><c> text</c><00:02:28.140><c> and</c><00:02:28.440><c> variables</c><00:02:28.980><c> in</c><00:02:29.340><c> two</c>
+
+00:02:29.449 --> 00:02:29.459 align:start position:0%
+separate the text and variables in two
+ 
+
+00:02:29.459 --> 00:02:31.430 align:start position:0%
+separate the text and variables in two
+separate<00:02:29.819><c> arguments</c>
+
+00:02:31.430 --> 00:02:31.440 align:start position:0%
+separate arguments
+ 
+
+00:02:31.440 --> 00:02:35.089 align:start position:0%
+separate arguments
+print<00:02:31.980><c> then</c><00:02:32.819><c> write</c><00:02:33.000><c> our</c><00:02:33.239><c> text</c><00:02:33.420><c> within</c><00:02:33.780><c> quotes</c>
+
+00:02:35.089 --> 00:02:35.099 align:start position:0%
+print then write our text within quotes
+ 
+
+00:02:35.099 --> 00:02:36.470 align:start position:0%
+print then write our text within quotes
+you
+
+00:02:36.470 --> 00:02:36.480 align:start position:0%
+you
+ 
+
+00:02:36.480 --> 00:02:38.030 align:start position:0%
+you
+you<00:02:36.959><c> are</c>
+
+00:02:38.030 --> 00:02:38.040 align:start position:0%
+you are
+ 
+
+00:02:38.040 --> 00:02:39.470 align:start position:0%
+you are
+wherever<00:02:38.700><c> you</c><00:02:38.819><c> would</c><00:02:38.940><c> like</c><00:02:39.060><c> to</c><00:02:39.180><c> add</c><00:02:39.300><c> a</c>
+
+00:02:39.470 --> 00:02:39.480 align:start position:0%
+wherever you would like to add a
+ 
+
+00:02:39.480 --> 00:02:41.990 align:start position:0%
+wherever you would like to add a
+variable<00:02:39.780><c> add</c><00:02:40.379><c> a</c><00:02:40.560><c> comma</c><00:02:40.920><c> then</c><00:02:41.459><c> the</c><00:02:41.700><c> variable</c>
+
+00:02:41.990 --> 00:02:42.000 align:start position:0%
+variable add a comma then the variable
+ 
+
+00:02:42.000 --> 00:02:44.330 align:start position:0%
+variable add a comma then the variable
+name<00:02:42.239><c> if</c><00:02:42.900><c> you</c><00:02:42.959><c> have</c><00:02:43.140><c> more</c><00:02:43.319><c> text</c><00:02:43.560><c> that</c><00:02:43.920><c> follows</c>
+
+00:02:44.330 --> 00:02:44.340 align:start position:0%
+name if you have more text that follows
+ 
+
+00:02:44.340 --> 00:02:46.790 align:start position:0%
+name if you have more text that follows
+add<00:02:44.760><c> another</c><00:02:45.000><c> comma</c>
+
+00:02:46.790 --> 00:02:46.800 align:start position:0%
+add another comma
+ 
+
+00:02:46.800 --> 00:02:49.490 align:start position:0%
+add another comma
+then<00:02:47.220><c> add</c><00:02:47.459><c> some</c><00:02:47.700><c> additional</c><00:02:48.000><c> text</c><00:02:48.300><c> you</c><00:02:49.260><c> are</c>
+
+00:02:49.490 --> 00:02:49.500 align:start position:0%
+then add some additional text you are
+ 
+
+00:02:49.500 --> 00:02:54.350 align:start position:0%
+then add some additional text you are
+age<00:02:49.940><c> years</c><00:02:50.940><c> old</c>
+
+00:02:54.350 --> 00:02:54.360 align:start position:0%
+ 
+ 
+
+00:02:54.360 --> 00:02:56.630 align:start position:0%
+ 
+so<00:02:54.720><c> what</c><00:02:54.900><c> we've</c><00:02:55.080><c> done</c><00:02:55.260><c> is</c><00:02:55.560><c> separated</c><00:02:56.160><c> our</c>
+
+00:02:56.630 --> 00:02:56.640 align:start position:0%
+so what we've done is separated our
+ 
+
+00:02:56.640 --> 00:02:58.670 align:start position:0%
+so what we've done is separated our
+strings<00:02:57.060><c> and</c><00:02:57.480><c> variables</c><00:02:57.959><c> into</c><00:02:58.260><c> different</c>
+
+00:02:58.670 --> 00:02:58.680 align:start position:0%
+strings and variables into different
+ 
+
+00:02:58.680 --> 00:03:00.830 align:start position:0%
+strings and variables into different
+arguments<00:02:59.280><c> each</c><00:02:59.580><c> separated</c><00:03:00.060><c> with</c><00:03:00.300><c> a</c><00:03:00.480><c> comma</c>
+
+00:03:00.830 --> 00:03:00.840 align:start position:0%
+arguments each separated with a comma
+ 
+
+00:03:00.840 --> 00:03:02.509 align:start position:0%
+arguments each separated with a comma
+but<00:03:01.140><c> if</c><00:03:01.260><c> you</c><00:03:01.379><c> separate</c><00:03:01.739><c> your</c><00:03:01.920><c> variables</c><00:03:02.400><c> and</c>
+
+00:03:02.509 --> 00:03:02.519 align:start position:0%
+but if you separate your variables and
+ 
+
+00:03:02.519 --> 00:03:04.430 align:start position:0%
+but if you separate your variables and
+text<00:03:02.700><c> into</c><00:03:03.000><c> separate</c><00:03:03.420><c> arguments</c><00:03:03.900><c> you'll</c>
+
+00:03:04.430 --> 00:03:04.440 align:start position:0%
+text into separate arguments you'll
+ 
+
+00:03:04.440 --> 00:03:06.650 align:start position:0%
+text into separate arguments you'll
+include<00:03:04.739><c> a</c><00:03:04.920><c> space</c><00:03:05.160><c> automatically</c><00:03:05.819><c> so</c><00:03:06.480><c> I'm</c>
+
+00:03:06.650 --> 00:03:06.660 align:start position:0%
+include a space automatically so I'm
+ 
+
+00:03:06.660 --> 00:03:09.229 align:start position:0%
+include a space automatically so I'm
+going<00:03:06.840><c> to</c><00:03:06.959><c> get</c><00:03:07.200><c> rid</c><00:03:07.379><c> of</c><00:03:07.560><c> the</c><00:03:07.860><c> space</c><00:03:08.160><c> after</c><00:03:08.580><c> R</c>
+
+00:03:09.229 --> 00:03:09.239 align:start position:0%
+going to get rid of the space after R
+ 
+
+00:03:09.239 --> 00:03:12.890 align:start position:0%
+going to get rid of the space after R
+and<00:03:10.019><c> before</c><00:03:10.260><c> the</c><00:03:10.620><c> word</c><00:03:10.800><c> ears</c>
+
+00:03:12.890 --> 00:03:12.900 align:start position:0%
+and before the word ears
+ 
+
+00:03:12.900 --> 00:03:14.930 align:start position:0%
+and before the word ears
+so<00:03:13.379><c> spacing</c><00:03:13.860><c> is</c><00:03:14.040><c> pretty</c><00:03:14.159><c> important</c><00:03:14.519><c> depending</c>
+
+00:03:14.930 --> 00:03:14.940 align:start position:0%
+so spacing is pretty important depending
+ 
+
+00:03:14.940 --> 00:03:17.030 align:start position:0%
+so spacing is pretty important depending
+on<00:03:15.120><c> which</c><00:03:15.360><c> method</c><00:03:15.720><c> you</c><00:03:15.900><c> use</c><00:03:16.080><c> these</c><00:03:16.739><c> two</c><00:03:16.860><c> print</c>
+
+00:03:17.030 --> 00:03:17.040 align:start position:0%
+on which method you use these two print
+ 
+
+00:03:17.040 --> 00:03:18.649 align:start position:0%
+on which method you use these two print
+statements<00:03:17.580><c> will</c><00:03:17.760><c> output</c><00:03:18.120><c> the</c><00:03:18.300><c> same</c><00:03:18.480><c> thing</c>
+
+00:03:18.649 --> 00:03:18.659 align:start position:0%
+statements will output the same thing
+ 
+
+00:03:18.659 --> 00:03:21.110 align:start position:0%
+statements will output the same thing
+you<00:03:19.140><c> are</c><00:03:19.319><c> 21</c><00:03:19.560><c> years</c><00:03:19.920><c> old</c><00:03:20.159><c> the</c><00:03:20.580><c> third</c><00:03:20.700><c> way</c><00:03:20.940><c> to</c>
+
+00:03:21.110 --> 00:03:21.120 align:start position:0%
+you are 21 years old the third way to
+ 
+
+00:03:21.120 --> 00:03:22.729 align:start position:0%
+you are 21 years old the third way to
+print<00:03:21.300><c> a</c><00:03:21.540><c> variable</c><00:03:21.840><c> along</c><00:03:22.140><c> with</c><00:03:22.379><c> some</c><00:03:22.560><c> text</c>
+
+00:03:22.729 --> 00:03:22.739 align:start position:0%
+print a variable along with some text
+ 
+
+00:03:22.739 --> 00:03:24.410 align:start position:0%
+print a variable along with some text
+and<00:03:23.159><c> this</c><00:03:23.280><c> is</c><00:03:23.400><c> becoming</c><00:03:23.819><c> the</c><00:03:24.060><c> more</c><00:03:24.300><c> popular</c>
+
+00:03:24.410 --> 00:03:24.420 align:start position:0%
+and this is becoming the more popular
+ 
+
+00:03:24.420 --> 00:03:26.690 align:start position:0%
+and this is becoming the more popular
+way<00:03:24.840><c> of</c><00:03:24.959><c> doing</c><00:03:25.140><c> things</c><00:03:25.440><c> is</c><00:03:26.040><c> to</c><00:03:26.220><c> use</c><00:03:26.400><c> what</c><00:03:26.580><c> is</c>
+
+00:03:26.690 --> 00:03:26.700 align:start position:0%
+way of doing things is to use what is
+ 
+
+00:03:26.700 --> 00:03:28.250 align:start position:0%
+way of doing things is to use what is
+called<00:03:26.879><c> an</c><00:03:27.060><c> F</c><00:03:27.239><c> string</c>
+
+00:03:28.250 --> 00:03:28.260 align:start position:0%
+called an F string
+ 
+
+00:03:28.260 --> 00:03:31.190 align:start position:0%
+called an F string
+print<00:03:28.800><c> a</c><00:03:29.459><c> set</c><00:03:29.640><c> of</c><00:03:29.819><c> quotes</c><00:03:30.000><c> precede</c><00:03:30.959><c> your</c>
+
+00:03:31.190 --> 00:03:31.200 align:start position:0%
+print a set of quotes precede your
+ 
+
+00:03:31.200 --> 00:03:33.050 align:start position:0%
+print a set of quotes precede your
+quotes<00:03:31.440><c> with</c><00:03:31.980><c> f</c>
+
+00:03:33.050 --> 00:03:33.060 align:start position:0%
+quotes with f
+ 
+
+00:03:33.060 --> 00:03:36.530 align:start position:0%
+quotes with f
+u<00:03:33.900><c> r</c><00:03:34.560><c> wherever</c><00:03:35.459><c> you</c><00:03:35.700><c> would</c><00:03:35.760><c> like</c><00:03:35.940><c> to</c><00:03:36.060><c> insert</c><00:03:36.360><c> a</c>
+
+00:03:36.530 --> 00:03:36.540 align:start position:0%
+u r wherever you would like to insert a
+ 
+
+00:03:36.540 --> 00:03:39.770 align:start position:0%
+u r wherever you would like to insert a
+variable<00:03:36.840><c> add</c><00:03:37.739><c> a</c><00:03:37.920><c> set</c><00:03:38.099><c> of</c><00:03:38.280><c> curly</c><00:03:38.580><c> braces</c><00:03:39.120><c> the</c>
+
+00:03:39.770 --> 00:03:39.780 align:start position:0%
+variable add a set of curly braces the
+ 
+
+00:03:39.780 --> 00:03:41.990 align:start position:0%
+variable add a set of curly braces the
+curly<00:03:40.080><c> braces</c><00:03:40.560><c> are</c><00:03:40.799><c> acting</c><00:03:41.099><c> as</c><00:03:41.280><c> a</c><00:03:41.459><c> placeholder</c>
+
+00:03:41.990 --> 00:03:42.000 align:start position:0%
+curly braces are acting as a placeholder
+ 
+
+00:03:42.000 --> 00:03:44.449 align:start position:0%
+curly braces are acting as a placeholder
+for<00:03:42.299><c> a</c><00:03:42.540><c> value</c><00:03:42.720><c> or</c><00:03:43.019><c> variable</c><00:03:43.440><c> we</c><00:03:44.099><c> will</c><00:03:44.280><c> place</c>
+
+00:03:44.449 --> 00:03:44.459 align:start position:0%
+for a value or variable we will place
+ 
+
+00:03:44.459 --> 00:03:47.149 align:start position:0%
+for a value or variable we will place
+our<00:03:44.760><c> variable</c><00:03:45.060><c> age</c><00:03:45.420><c> within</c><00:03:46.080><c> the</c><00:03:46.379><c> curly</c><00:03:46.680><c> braces</c>
+
+00:03:47.149 --> 00:03:47.159 align:start position:0%
+our variable age within the curly braces
+ 
+
+00:03:47.159 --> 00:03:49.550 align:start position:0%
+our variable age within the curly braces
+so<00:03:47.819><c> yeah</c><00:03:48.000><c> those</c><00:03:48.420><c> are</c><00:03:48.659><c> three</c><00:03:48.959><c> different</c><00:03:49.200><c> ways</c>
+
+00:03:49.550 --> 00:03:49.560 align:start position:0%
+so yeah those are three different ways
+ 
+
+00:03:49.560 --> 00:03:51.710 align:start position:0%
+so yeah those are three different ways
+to<00:03:49.799><c> Output</c><00:03:50.159><c> a</c><00:03:50.400><c> variable</c><00:03:50.760><c> along</c><00:03:51.299><c> with</c><00:03:51.540><c> some</c>
+
+00:03:51.710 --> 00:03:51.720 align:start position:0%
+to Output a variable along with some
+ 
+
+00:03:51.720 --> 00:03:53.690 align:start position:0%
+to Output a variable along with some
+text<00:03:51.959><c> as</c><00:03:52.620><c> of</c><00:03:52.860><c> the</c><00:03:52.980><c> filming</c><00:03:53.220><c> of</c><00:03:53.400><c> this</c><00:03:53.580><c> video</c>
+
+00:03:53.690 --> 00:03:53.700 align:start position:0%
+text as of the filming of this video
+ 
+
+00:03:53.700 --> 00:03:55.850 align:start position:0%
+text as of the filming of this video
+fstrings<00:03:54.540><c> are</c><00:03:54.720><c> becoming</c><00:03:55.140><c> much</c><00:03:55.319><c> more</c><00:03:55.620><c> popular</c>
+
+00:03:55.850 --> 00:03:55.860 align:start position:0%
+fstrings are becoming much more popular
+ 
+
+00:03:55.860 --> 00:03:58.550 align:start position:0%
+fstrings are becoming much more popular
+for<00:03:56.280><c> output</c><00:03:56.640><c> for</c><00:03:57.360><c> the</c><00:03:57.480><c> rest</c><00:03:57.599><c> of</c><00:03:57.780><c> the</c><00:03:57.900><c> series</c><00:03:58.080><c> we</c>
+
+00:03:58.550 --> 00:03:58.560 align:start position:0%
+for output for the rest of the series we
+ 
+
+00:03:58.560 --> 00:04:00.830 align:start position:0%
+for output for the rest of the series we
+will<00:03:58.739><c> be</c><00:03:58.860><c> using</c><00:03:59.220><c> fstrings</c><00:04:00.060><c> but</c><00:04:00.480><c> you</c><00:04:00.720><c> should</c>
+
+00:04:00.830 --> 00:04:00.840 align:start position:0%
+will be using fstrings but you should
+ 
+
+00:04:00.840 --> 00:04:02.930 align:start position:0%
+will be using fstrings but you should
+still<00:04:01.019><c> be</c><00:04:01.260><c> aware</c><00:04:01.500><c> of</c><00:04:01.799><c> the</c><00:04:01.980><c> existence</c><00:04:02.459><c> of</c><00:04:02.760><c> these</c>
+
+00:04:02.930 --> 00:04:02.940 align:start position:0%
+still be aware of the existence of these
+ 
+
+00:04:02.940 --> 00:04:05.030 align:start position:0%
+still be aware of the existence of these
+other<00:04:03.060><c> two</c><00:04:03.299><c> methods</c><00:04:03.780><c> as</c><00:04:03.900><c> well</c><00:04:04.080><c> I</c><00:04:04.739><c> need</c><00:04:04.920><c> to</c>
+
+00:04:05.030 --> 00:04:05.040 align:start position:0%
+other two methods as well I need to
+ 
+
+00:04:05.040 --> 00:04:07.130 align:start position:0%
+other two methods as well I need to
+discuss<00:04:05.340><c> different</c><00:04:05.700><c> data</c><00:04:06.180><c> types</c><00:04:06.540><c> there's</c>
+
+00:04:07.130 --> 00:04:07.140 align:start position:0%
+discuss different data types there's
+ 
+
+00:04:07.140 --> 00:04:09.530 align:start position:0%
+discuss different data types there's
+four<00:04:07.440><c> basic</c><00:04:07.920><c> data</c><00:04:08.220><c> types</c><00:04:08.459><c> in</c><00:04:08.580><c> Python</c><00:04:09.000><c> there's</c>
+
+00:04:09.530 --> 00:04:09.540 align:start position:0%
+four basic data types in Python there's
+ 
+
+00:04:09.540 --> 00:04:11.210 align:start position:0%
+four basic data types in Python there's
+still<00:04:09.720><c> more</c><00:04:09.959><c> but</c><00:04:10.200><c> these</c><00:04:10.560><c> are</c><00:04:10.680><c> four</c><00:04:10.920><c> for</c>
+
+00:04:11.210 --> 00:04:11.220 align:start position:0%
+still more but these are four for
+ 
+
+00:04:11.220 --> 00:04:14.330 align:start position:0%
+still more but these are four for
+beginners<00:04:11.700><c> we</c><00:04:12.420><c> have</c><00:04:12.599><c> integers</c><00:04:13.340><c> floats</c>
+
+00:04:14.330 --> 00:04:14.340 align:start position:0%
+beginners we have integers floats
+ 
+
+00:04:14.340 --> 00:04:17.629 align:start position:0%
+beginners we have integers floats
+strings<00:04:15.299><c> and</c><00:04:15.959><c> booleans</c><00:04:16.500><c> let's</c><00:04:17.160><c> begin</c><00:04:17.340><c> with</c>
+
+00:04:17.629 --> 00:04:17.639 align:start position:0%
+strings and booleans let's begin with
+ 
+
+00:04:17.639 --> 00:04:18.770 align:start position:0%
+strings and booleans let's begin with
+integers
+
+00:04:18.770 --> 00:04:18.780 align:start position:0%
+integers
+ 
+
+00:04:18.780 --> 00:04:22.009 align:start position:0%
+integers
+we'll<00:04:19.440><c> create</c><00:04:19.739><c> three</c><00:04:20.220><c> integer</c><00:04:20.699><c> variables</c><00:04:21.239><c> for</c>
+
+00:04:22.009 --> 00:04:22.019 align:start position:0%
+we'll create three integer variables for
+ 
+
+00:04:22.019 --> 00:04:24.110 align:start position:0%
+we'll create three integer variables for
+example<00:04:22.320><c> we</c><00:04:22.979><c> have</c><00:04:23.100><c> age</c>
+
+00:04:24.110 --> 00:04:24.120 align:start position:0%
+example we have age
+ 
+
+00:04:24.120 --> 00:04:26.450 align:start position:0%
+example we have age
+another<00:04:24.720><c> whole</c><00:04:24.960><c> number</c><00:04:25.199><c> could</c><00:04:25.680><c> be</c><00:04:25.919><c> maybe</c>
+
+00:04:26.450 --> 00:04:26.460 align:start position:0%
+another whole number could be maybe
+ 
+
+00:04:26.460 --> 00:04:29.270 align:start position:0%
+another whole number could be maybe
+players<00:04:27.360><c> or</c><00:04:27.780><c> users</c><00:04:28.199><c> you're</c><00:04:28.800><c> not</c><00:04:28.979><c> going</c><00:04:29.160><c> to</c>
+
+00:04:29.270 --> 00:04:29.280 align:start position:0%
+players or users you're not going to
+ 
+
+00:04:29.280 --> 00:04:31.310 align:start position:0%
+players or users you're not going to
+have<00:04:29.580><c> half</c><00:04:30.000><c> a</c><00:04:30.240><c> player</c><00:04:30.540><c> right</c>
+
+00:04:31.310 --> 00:04:31.320 align:start position:0%
+have half a player right
+ 
+
+00:04:31.320 --> 00:04:33.290 align:start position:0%
+have half a player right
+or<00:04:31.740><c> nine</c><00:04:31.979><c> tenths</c><00:04:32.400><c> of</c><00:04:32.460><c> a</c><00:04:32.580><c> player</c><00:04:32.820><c> it's</c><00:04:33.000><c> going</c><00:04:33.180><c> to</c>
+
+00:04:33.290 --> 00:04:33.300 align:start position:0%
+or nine tenths of a player it's going to
+ 
+
+00:04:33.300 --> 00:04:36.530 align:start position:0%
+or nine tenths of a player it's going to
+be<00:04:33.360><c> a</c><00:04:33.540><c> whole</c><00:04:33.660><c> number</c><00:04:33.860><c> you</c><00:04:34.860><c> have</c><00:04:34.979><c> one</c><00:04:35.580><c> two</c><00:04:36.060><c> three</c>
+
+00:04:36.530 --> 00:04:36.540 align:start position:0%
+be a whole number you have one two three
+ 
+
+00:04:36.540 --> 00:04:39.590 align:start position:0%
+be a whole number you have one two three
+or<00:04:36.840><c> more</c><00:04:37.080><c> players</c><00:04:37.560><c> all</c><00:04:38.040><c> whole</c><00:04:38.280><c> numbers</c><00:04:38.600><c> then</c>
+
+00:04:39.590 --> 00:04:39.600 align:start position:0%
+or more players all whole numbers then
+ 
+
+00:04:39.600 --> 00:04:42.530 align:start position:0%
+or more players all whole numbers then
+maybe<00:04:40.020><c> quantity</c><00:04:40.919><c> maybe</c><00:04:41.520><c> somebody</c><00:04:41.880><c> is</c><00:04:42.180><c> buying</c>
+
+00:04:42.530 --> 00:04:42.540 align:start position:0%
+maybe quantity maybe somebody is buying
+ 
+
+00:04:42.540 --> 00:04:45.590 align:start position:0%
+maybe quantity maybe somebody is buying
+something<00:04:42.800><c> quantity</c><00:04:43.800><c> equals</c><00:04:44.639><c> five</c><00:04:44.940><c> you</c>
+
+00:04:45.590 --> 00:04:45.600 align:start position:0%
+something quantity equals five you
+ 
+
+00:04:45.600 --> 00:04:47.510 align:start position:0%
+something quantity equals five you
+wouldn't<00:04:45.720><c> have</c><00:04:46.080><c> like</c><00:04:46.500><c> half</c><00:04:46.800><c> a</c><00:04:46.979><c> product</c><00:04:47.160><c> right</c>
+
+00:04:47.510 --> 00:04:47.520 align:start position:0%
+wouldn't have like half a product right
+ 
+
+00:04:47.520 --> 00:04:49.610 align:start position:0%
+wouldn't have like half a product right
+it<00:04:48.120><c> would</c><00:04:48.240><c> be</c><00:04:48.360><c> a</c><00:04:48.479><c> whole</c><00:04:48.600><c> number</c>
+
+00:04:49.610 --> 00:04:49.620 align:start position:0%
+it would be a whole number
+ 
+
+00:04:49.620 --> 00:04:51.230 align:start position:0%
+it would be a whole number
+then<00:04:50.160><c> let's</c><00:04:50.460><c> display</c><00:04:50.639><c> some</c><00:04:50.940><c> of</c><00:04:51.060><c> these</c>
+
+00:04:51.230 --> 00:04:51.240 align:start position:0%
+then let's display some of these
+ 
+
+00:04:51.240 --> 00:04:52.909 align:start position:0%
+then let's display some of these
+variables
+
+00:04:52.909 --> 00:04:52.919 align:start position:0%
+variables
+ 
+
+00:04:52.919 --> 00:04:55.670 align:start position:0%
+variables
+print<00:04:53.460><c> we'll</c><00:04:54.060><c> use</c><00:04:54.300><c> fstrings</c><00:04:54.960><c> because</c><00:04:55.199><c> we</c><00:04:55.560><c> like</c>
+
+00:04:55.670 --> 00:04:55.680 align:start position:0%
+print we'll use fstrings because we like
+ 
+
+00:04:55.680 --> 00:04:57.290 align:start position:0%
+print we'll use fstrings because we like
+fstrings
+
+00:04:57.290 --> 00:04:57.300 align:start position:0%
+fstrings
+ 
+
+00:04:57.300 --> 00:04:58.490 align:start position:0%
+fstrings
+you
+
+00:04:58.490 --> 00:04:58.500 align:start position:0%
+you
+ 
+
+00:04:58.500 --> 00:05:00.170 align:start position:0%
+you
+are
+
+00:05:00.170 --> 00:05:00.180 align:start position:0%
+are
+ 
+
+00:05:00.180 --> 00:05:03.469 align:start position:0%
+are
+age<00:05:00.840><c> years</c><00:05:01.740><c> old</c><00:05:02.220><c> this</c><00:05:02.699><c> is</c><00:05:02.820><c> the</c><00:05:03.000><c> same</c><00:05:03.120><c> from</c><00:05:03.360><c> the</c>
+
+00:05:03.469 --> 00:05:03.479 align:start position:0%
+age years old this is the same from the
+ 
+
+00:05:03.479 --> 00:05:05.870 align:start position:0%
+age years old this is the same from the
+previous<00:05:03.600><c> example</c>
+
+00:05:05.870 --> 00:05:05.880 align:start position:0%
+previous example
+ 
+
+00:05:05.880 --> 00:05:08.590 align:start position:0%
+previous example
+let's<00:05:06.240><c> use</c><00:05:06.479><c> players</c>
+
+00:05:08.590 --> 00:05:08.600 align:start position:0%
+let's use players
+ 
+
+00:05:08.600 --> 00:05:11.990 align:start position:0%
+let's use players
+there<00:05:09.600><c> are</c>
+
+00:05:11.990 --> 00:05:12.000 align:start position:0%
+there are
+ 
+
+00:05:12.000 --> 00:05:13.490 align:start position:0%
+there are
+players
+
+00:05:13.490 --> 00:05:13.500 align:start position:0%
+players
+ 
+
+00:05:13.500 --> 00:05:15.469 align:start position:0%
+players
+than<00:05:13.919><c> the</c><00:05:14.100><c> word</c><00:05:14.220><c> players</c>
+
+00:05:15.469 --> 00:05:15.479 align:start position:0%
+than the word players
+ 
+
+00:05:15.479 --> 00:05:17.870 align:start position:0%
+than the word players
+online
+
+00:05:17.870 --> 00:05:17.880 align:start position:0%
+online
+ 
+
+00:05:17.880 --> 00:05:22.270 align:start position:0%
+online
+then<00:05:18.720><c> quantity</c><00:05:19.259><c> let's</c><00:05:19.680><c> use</c><00:05:19.919><c> this</c>
+
+00:05:22.270 --> 00:05:22.280 align:start position:0%
+ 
+ 
+
+00:05:22.280 --> 00:05:26.870 align:start position:0%
+ 
+you<00:05:23.280><c> would</c><00:05:23.699><c> like</c><00:05:24.180><c> to</c><00:05:24.960><c> buy</c>
+
+00:05:26.870 --> 00:05:26.880 align:start position:0%
+you would like to buy
+ 
+
+00:05:26.880 --> 00:05:30.710 align:start position:0%
+you would like to buy
+our<00:05:27.479><c> variable</c><00:05:27.780><c> quantity</c>
+
+00:05:30.710 --> 00:05:30.720 align:start position:0%
+ 
+ 
+
+00:05:30.720 --> 00:05:32.990 align:start position:0%
+ 
+items
+
+00:05:32.990 --> 00:05:33.000 align:start position:0%
+items
+ 
+
+00:05:33.000 --> 00:05:35.629 align:start position:0%
+items
+let's<00:05:33.360><c> run</c><00:05:33.720><c> this</c>
+
+00:05:35.629 --> 00:05:35.639 align:start position:0%
+let's run this
+ 
+
+00:05:35.639 --> 00:05:38.330 align:start position:0%
+let's run this
+you<00:05:36.180><c> are</c><00:05:36.360><c> 21</c><00:05:36.600><c> years</c><00:05:37.020><c> old</c><00:05:37.259><c> there</c><00:05:37.979><c> are</c><00:05:38.100><c> two</c>
+
+00:05:38.330 --> 00:05:38.340 align:start position:0%
+you are 21 years old there are two
+ 
+
+00:05:38.340 --> 00:05:40.249 align:start position:0%
+you are 21 years old there are two
+players<00:05:38.759><c> online</c><00:05:39.000><c> you</c><00:05:39.600><c> would</c><00:05:39.720><c> like</c><00:05:39.840><c> to</c><00:05:40.020><c> buy</c>
+
+00:05:40.249 --> 00:05:40.259 align:start position:0%
+players online you would like to buy
+ 
+
+00:05:40.259 --> 00:05:42.350 align:start position:0%
+players online you would like to buy
+five<00:05:40.620><c> items</c>
+
+00:05:42.350 --> 00:05:42.360 align:start position:0%
+five items
+ 
+
+00:05:42.360 --> 00:05:44.930 align:start position:0%
+five items
+so<00:05:42.720><c> those</c><00:05:42.840><c> are</c><00:05:43.020><c> integers</c><00:05:43.500><c> they're</c><00:05:44.340><c> just</c><00:05:44.639><c> whole</c>
+
+00:05:44.930 --> 00:05:44.940 align:start position:0%
+so those are integers they're just whole
+ 
+
+00:05:44.940 --> 00:05:46.310 align:start position:0%
+so those are integers they're just whole
+numbers
+
+00:05:46.310 --> 00:05:46.320 align:start position:0%
+numbers
+ 
+
+00:05:46.320 --> 00:05:47.870 align:start position:0%
+numbers
+I'm<00:05:46.680><c> going</c><00:05:46.860><c> to</c><00:05:46.979><c> turn</c><00:05:47.160><c> these</c><00:05:47.460><c> lines</c><00:05:47.639><c> into</c>
+
+00:05:47.870 --> 00:05:47.880 align:start position:0%
+I'm going to turn these lines into
+ 
+
+00:05:47.880 --> 00:05:51.469 align:start position:0%
+I'm going to turn these lines into
+comments<00:05:48.419><c> and</c><00:05:49.080><c> then</c><00:05:49.259><c> we</c><00:05:49.500><c> can</c><00:05:49.620><c> continue</c>
+
+00:05:51.469 --> 00:05:51.479 align:start position:0%
+comments and then we can continue
+ 
+
+00:05:51.479 --> 00:05:54.590 align:start position:0%
+comments and then we can continue
+let's<00:05:51.840><c> move</c><00:05:52.080><c> on</c><00:05:52.199><c> to</c><00:05:52.380><c> floats</c>
+
+00:05:54.590 --> 00:05:54.600 align:start position:0%
+let's move on to floats
+ 
+
+00:05:54.600 --> 00:05:57.110 align:start position:0%
+let's move on to floats
+a<00:05:55.320><c> float</c><00:05:55.680><c> is</c><00:05:55.860><c> a</c><00:05:56.039><c> number</c><00:05:56.220><c> that</c><00:05:56.580><c> contains</c><00:05:57.000><c> a</c>
+
+00:05:57.110 --> 00:05:57.120 align:start position:0%
+a float is a number that contains a
+ 
+
+00:05:57.120 --> 00:06:00.890 align:start position:0%
+a float is a number that contains a
+decimal<00:05:57.479><c> portion</c><00:05:57.840><c> for</c><00:05:58.800><c> example</c><00:05:59.160><c> maybe</c><00:06:00.120><c> a</c><00:06:00.419><c> GPA</c>
+
+00:06:00.890 --> 00:06:00.900 align:start position:0%
+decimal portion for example maybe a GPA
+ 
+
+00:06:00.900 --> 00:06:02.749 align:start position:0%
+decimal portion for example maybe a GPA
+that's<00:06:01.320><c> usually</c><00:06:01.680><c> a</c><00:06:01.919><c> decimal</c>
+
+00:06:02.749 --> 00:06:02.759 align:start position:0%
+that's usually a decimal
+ 
+
+00:06:02.759 --> 00:06:06.290 align:start position:0%
+that's usually a decimal
+my<00:06:03.479><c> GPA</c><00:06:04.080><c> is</c><00:06:04.680><c> 3.2</c>
+
+00:06:06.290 --> 00:06:06.300 align:start position:0%
+my GPA is 3.2
+ 
+
+00:06:06.300 --> 00:06:08.749 align:start position:0%
+my GPA is 3.2
+what<00:06:06.720><c> about</c><00:06:06.840><c> a</c><00:06:07.080><c> distance</c><00:06:07.460><c> this</c><00:06:08.460><c> could</c><00:06:08.639><c> be</c>
+
+00:06:08.749 --> 00:06:08.759 align:start position:0%
+what about a distance this could be
+ 
+
+00:06:08.759 --> 00:06:12.010 align:start position:0%
+what about a distance this could be
+kilometers<00:06:09.419><c> miles</c><00:06:09.900><c> whatever</c>
+
+00:06:12.010 --> 00:06:12.020 align:start position:0%
+kilometers miles whatever
+ 
+
+00:06:12.020 --> 00:06:15.830 align:start position:0%
+kilometers miles whatever
+2.5<00:06:13.020><c> kilometers</c>
+
+00:06:15.830 --> 00:06:15.840 align:start position:0%
+2.5 kilometers
+ 
+
+00:06:15.840 --> 00:06:18.890 align:start position:0%
+2.5 kilometers
+um<00:06:15.900><c> price</c><00:06:16.199><c> price</c><00:06:16.979><c> could</c><00:06:17.280><c> be</c><00:06:17.400><c> afloat</c><00:06:18.360><c> price</c>
+
+00:06:18.890 --> 00:06:18.900 align:start position:0%
+um price price could be afloat price
+ 
+
+00:06:18.900 --> 00:06:21.770 align:start position:0%
+um price price could be afloat price
+equals<00:06:19.500><c> 10.99</c>
+
+00:06:21.770 --> 00:06:21.780 align:start position:0%
+equals 10.99
+ 
+
+00:06:21.780 --> 00:06:25.490 align:start position:0%
+equals 10.99
+let's<00:06:22.259><c> display</c><00:06:22.500><c> some</c><00:06:22.800><c> of</c><00:06:22.919><c> these</c>
+
+00:06:25.490 --> 00:06:25.500 align:start position:0%
+ 
+ 
+
+00:06:25.500 --> 00:06:27.650 align:start position:0%
+ 
+let's<00:06:26.039><c> print</c><00:06:26.340><c> our</c><00:06:26.520><c> GPA</c>
+
+00:06:27.650 --> 00:06:27.660 align:start position:0%
+let's print our GPA
+ 
+
+00:06:27.660 --> 00:06:31.370 align:start position:0%
+let's print our GPA
+your<00:06:28.500><c> GPA</c><00:06:29.460><c> is</c>
+
+00:06:31.370 --> 00:06:31.380 align:start position:0%
+your GPA is
+ 
+
+00:06:31.380 --> 00:06:34.790 align:start position:0%
+your GPA is
+GPA
+
+00:06:34.790 --> 00:06:34.800 align:start position:0%
+ 
+ 
+
+00:06:34.800 --> 00:06:36.830 align:start position:0%
+ 
+let's<00:06:35.220><c> print</c><00:06:35.520><c> distance</c>
+
+00:06:36.830 --> 00:06:36.840 align:start position:0%
+let's print distance
+ 
+
+00:06:36.840 --> 00:06:40.370 align:start position:0%
+let's print distance
+you<00:06:37.800><c> ran</c>
+
+00:06:40.370 --> 00:06:40.380 align:start position:0%
+ 
+ 
+
+00:06:40.380 --> 00:06:44.749 align:start position:0%
+ 
+distance<00:06:41.100><c> then</c><00:06:41.819><c> I'll</c><00:06:42.000><c> add</c><00:06:42.180><c> km</c><00:06:42.600><c> for</c><00:06:42.780><c> kilometers</c>
+
+00:06:44.749 --> 00:06:44.759 align:start position:0%
+distance then I'll add km for kilometers
+ 
+
+00:06:44.759 --> 00:06:49.010 align:start position:0%
+distance then I'll add km for kilometers
+print
+
+00:06:49.010 --> 00:06:49.020 align:start position:0%
+ 
+ 
+
+00:06:49.020 --> 00:06:51.950 align:start position:0%
+ 
+the<00:06:49.800><c> price</c><00:06:50.280><c> is</c>
+
+00:06:51.950 --> 00:06:51.960 align:start position:0%
+the price is
+ 
+
+00:06:51.960 --> 00:06:54.290 align:start position:0%
+the price is
+I'm<00:06:52.259><c> going</c><00:06:52.440><c> to</c><00:06:52.560><c> add</c><00:06:52.740><c> a</c><00:06:52.919><c> dollar</c><00:06:53.039><c> sign</c>
+
+00:06:54.290 --> 00:06:54.300 align:start position:0%
+I'm going to add a dollar sign
+ 
+
+00:06:54.300 --> 00:06:57.770 align:start position:0%
+I'm going to add a dollar sign
+then<00:06:54.840><c> our</c><00:06:55.080><c> placeholder</c><00:06:55.680><c> with</c><00:06:56.160><c> price</c>
+
+00:06:57.770 --> 00:06:57.780 align:start position:0%
+then our placeholder with price
+ 
+
+00:06:57.780 --> 00:06:59.689 align:start position:0%
+then our placeholder with price
+and<00:06:58.380><c> that</c><00:06:58.560><c> should</c><00:06:58.740><c> be</c><00:06:58.860><c> good</c>
+
+00:06:59.689 --> 00:06:59.699 align:start position:0%
+and that should be good
+ 
+
+00:06:59.699 --> 00:07:03.950 align:start position:0%
+and that should be good
+your<00:07:00.300><c> GPA</c><00:07:00.720><c> is</c><00:07:00.960><c> 3.2</c><00:07:01.680><c> you</c><00:07:02.460><c> ran</c><00:07:02.699><c> 2.5</c><00:07:03.180><c> kilometers</c>
+
+00:07:03.950 --> 00:07:03.960 align:start position:0%
+your GPA is 3.2 you ran 2.5 kilometers
+ 
+
+00:07:03.960 --> 00:07:08.570 align:start position:0%
+your GPA is 3.2 you ran 2.5 kilometers
+the<00:07:04.740><c> price</c><00:07:04.979><c> is</c><00:07:05.479><c> 10.99</c><00:07:06.680><c> so</c><00:07:07.680><c> those</c><00:07:07.919><c> are</c><00:07:08.100><c> floats</c>
+
+00:07:08.570 --> 00:07:08.580 align:start position:0%
+the price is 10.99 so those are floats
+ 
+
+00:07:08.580 --> 00:07:10.969 align:start position:0%
+the price is 10.99 so those are floats
+they're<00:07:09.360><c> numbers</c><00:07:09.660><c> that</c><00:07:10.139><c> contain</c><00:07:10.440><c> a</c><00:07:10.620><c> decimal</c>
+
+00:07:10.969 --> 00:07:10.979 align:start position:0%
+they're numbers that contain a decimal
+ 
+
+00:07:10.979 --> 00:07:13.189 align:start position:0%
+they're numbers that contain a decimal
+portion<00:07:11.400><c> even</c><00:07:12.000><c> if</c><00:07:12.180><c> the</c><00:07:12.300><c> decimal</c><00:07:12.660><c> had</c><00:07:12.900><c> point</c>
+
+00:07:13.189 --> 00:07:13.199 align:start position:0%
+portion even if the decimal had point
+ 
+
+00:07:13.199 --> 00:07:14.990 align:start position:0%
+portion even if the decimal had point
+zero<00:07:13.680><c> it</c><00:07:14.039><c> would</c><00:07:14.100><c> still</c><00:07:14.340><c> be</c><00:07:14.460><c> considered</c><00:07:14.880><c> a</c>
+
+00:07:14.990 --> 00:07:15.000 align:start position:0%
+zero it would still be considered a
+ 
+
+00:07:15.000 --> 00:07:17.090 align:start position:0%
+zero it would still be considered a
+float<00:07:15.300><c> whereas</c><00:07:15.900><c> this</c><00:07:16.319><c> would</c><00:07:16.440><c> be</c><00:07:16.560><c> an</c><00:07:16.680><c> integer</c>
+
+00:07:17.090 --> 00:07:17.100 align:start position:0%
+float whereas this would be an integer
+ 
+
+00:07:17.100 --> 00:07:19.730 align:start position:0%
+float whereas this would be an integer
+so<00:07:17.580><c> those</c><00:07:17.759><c> are</c><00:07:17.940><c> floats</c><00:07:18.900><c> I'm</c><00:07:19.139><c> going</c><00:07:19.380><c> to</c><00:07:19.560><c> turn</c>
+
+00:07:19.730 --> 00:07:19.740 align:start position:0%
+so those are floats I'm going to turn
+ 
+
+00:07:19.740 --> 00:07:21.469 align:start position:0%
+so those are floats I'm going to turn
+these<00:07:20.099><c> lines</c><00:07:20.280><c> into</c><00:07:20.520><c> comments</c><00:07:21.000><c> then</c><00:07:21.240><c> we</c><00:07:21.419><c> can</c>
+
+00:07:21.469 --> 00:07:21.479 align:start position:0%
+these lines into comments then we can
+ 
+
+00:07:21.479 --> 00:07:24.409 align:start position:0%
+these lines into comments then we can
+move<00:07:21.660><c> on</c><00:07:21.840><c> now</c><00:07:22.440><c> we</c><00:07:22.680><c> have</c><00:07:22.800><c> strings</c><00:07:23.220><c> a</c><00:07:23.880><c> string</c><00:07:24.180><c> is</c>
+
+00:07:24.409 --> 00:07:24.419 align:start position:0%
+move on now we have strings a string is
+ 
+
+00:07:24.419 --> 00:07:27.409 align:start position:0%
+move on now we have strings a string is
+just<00:07:24.720><c> a</c><00:07:25.139><c> series</c><00:07:25.319><c> of</c><00:07:25.740><c> text</c><00:07:26.039><c> for</c><00:07:26.699><c> example</c><00:07:27.000><c> maybe</c>
+
+00:07:27.409 --> 00:07:27.419 align:start position:0%
+just a series of text for example maybe
+ 
+
+00:07:27.419 --> 00:07:30.890 align:start position:0%
+just a series of text for example maybe
+a<00:07:27.780><c> username</c><00:07:28.259><c> name</c><00:07:29.099><c> equals</c><00:07:30.060><c> type</c><00:07:30.539><c> in</c><00:07:30.720><c> your</c>
+
+00:07:30.890 --> 00:07:30.900 align:start position:0%
+a username name equals type in your
+ 
+
+00:07:30.900 --> 00:07:33.110 align:start position:0%
+a username name equals type in your
+first<00:07:31.020><c> name</c><00:07:31.259><c> it's</c><00:07:31.979><c> just</c><00:07:32.220><c> a</c><00:07:32.580><c> series</c><00:07:32.759><c> of</c>
+
+00:07:33.110 --> 00:07:33.120 align:start position:0%
+first name it's just a series of
+ 
+
+00:07:33.120 --> 00:07:35.390 align:start position:0%
+first name it's just a series of
+characters<00:07:33.360><c> those</c><00:07:34.139><c> are</c><00:07:34.259><c> strings</c><00:07:34.620><c> how</c><00:07:35.280><c> about</c>
+
+00:07:35.390 --> 00:07:35.400 align:start position:0%
+characters those are strings how about
+ 
+
+00:07:35.400 --> 00:07:38.270 align:start position:0%
+characters those are strings how about
+food<00:07:35.759><c> what's</c><00:07:36.360><c> your</c><00:07:36.539><c> favorite</c><00:07:36.660><c> food</c><00:07:37.039><c> I</c><00:07:38.039><c> like</c>
+
+00:07:38.270 --> 00:07:38.280 align:start position:0%
+food what's your favorite food I like
+ 
+
+00:07:38.280 --> 00:07:39.650 align:start position:0%
+food what's your favorite food I like
+pizza
+
+00:07:39.650 --> 00:07:39.660 align:start position:0%
+pizza
+ 
+
+00:07:39.660 --> 00:07:42.230 align:start position:0%
+pizza
+I'll<00:07:40.199><c> add</c><00:07:40.440><c> that</c><00:07:40.620><c> to</c><00:07:40.800><c> my</c><00:07:40.979><c> variable</c><00:07:41.340><c> food</c><00:07:41.639><c> then</c>
+
+00:07:42.230 --> 00:07:42.240 align:start position:0%
+I'll add that to my variable food then
+ 
+
+00:07:42.240 --> 00:07:45.230 align:start position:0%
+I'll add that to my variable food then
+what<00:07:42.419><c> about</c><00:07:42.539><c> an</c><00:07:42.780><c> email</c><00:07:42.900><c> email</c><00:07:43.759><c> equals</c><00:07:44.759><c> make</c><00:07:45.060><c> up</c>
+
+00:07:45.230 --> 00:07:45.240 align:start position:0%
+what about an email email equals make up
+ 
+
+00:07:45.240 --> 00:07:46.809 align:start position:0%
+what about an email email equals make up
+some<00:07:45.419><c> email</c>
+
+00:07:46.809 --> 00:07:46.819 align:start position:0%
+some email
+ 
+
+00:07:46.819 --> 00:07:49.850 align:start position:0%
+some email
+bro123<00:07:47.819><c> gmail.com</c>
+
+00:07:49.850 --> 00:07:49.860 align:start position:0%
+bro123 gmail.com
+ 
+
+00:07:49.860 --> 00:07:52.189 align:start position:0%
+bro123 gmail.com
+now<00:07:50.340><c> with</c><00:07:50.580><c> strings</c><00:07:51.000><c> they</c><00:07:51.599><c> can</c><00:07:51.840><c> contain</c>
+
+00:07:52.189 --> 00:07:52.199 align:start position:0%
+now with strings they can contain
+ 
+
+00:07:52.199 --> 00:07:54.170 align:start position:0%
+now with strings they can contain
+numbers<00:07:52.500><c> but</c><00:07:53.099><c> we</c><00:07:53.280><c> treat</c><00:07:53.460><c> them</c><00:07:53.699><c> differently</c>
+
+00:07:54.170 --> 00:07:54.180 align:start position:0%
+numbers but we treat them differently
+ 
+
+00:07:54.180 --> 00:07:57.170 align:start position:0%
+numbers but we treat them differently
+than<00:07:54.840><c> integers</c><00:07:55.500><c> and</c><00:07:55.800><c> floats</c><00:07:56.280><c> integers</c><00:07:57.000><c> and</c>
+
+00:07:57.170 --> 00:07:57.180 align:start position:0%
+than integers and floats integers and
+ 
+
+00:07:57.180 --> 00:07:58.850 align:start position:0%
+than integers and floats integers and
+floats<00:07:57.479><c> we</c><00:07:57.660><c> can</c><00:07:57.780><c> use</c><00:07:57.900><c> with</c><00:07:58.199><c> arithmetic</c>
+
+00:07:58.850 --> 00:07:58.860 align:start position:0%
+floats we can use with arithmetic
+ 
+
+00:07:58.860 --> 00:08:00.890 align:start position:0%
+floats we can use with arithmetic
+equations<00:07:59.220><c> here</c><00:07:59.940><c> they're</c><00:08:00.240><c> more</c><00:08:00.479><c> or</c><00:08:00.599><c> less</c><00:08:00.660><c> just</c>
+
+00:08:00.890 --> 00:08:00.900 align:start position:0%
+equations here they're more or less just
+ 
+
+00:08:00.900 --> 00:08:03.830 align:start position:0%
+equations here they're more or less just
+characters<00:08:01.199><c> so</c><00:08:02.160><c> a</c><00:08:02.400><c> string</c><00:08:02.699><c> is</c><00:08:02.940><c> just</c><00:08:03.240><c> a</c><00:08:03.660><c> series</c>
+
+00:08:03.830 --> 00:08:03.840 align:start position:0%
+characters so a string is just a series
+ 
+
+00:08:03.840 --> 00:08:06.050 align:start position:0%
+characters so a string is just a series
+of<00:08:04.139><c> characters</c><00:08:04.380><c> within</c><00:08:04.979><c> quotes</c><00:08:05.160><c> these</c><00:08:05.880><c> can</c><00:08:05.940><c> be</c>
+
+00:08:06.050 --> 00:08:06.060 align:start position:0%
+of characters within quotes these can be
+ 
+
+00:08:06.060 --> 00:08:08.270 align:start position:0%
+of characters within quotes these can be
+single<00:08:06.419><c> quotes</c><00:08:06.599><c> or</c><00:08:07.139><c> double</c><00:08:07.319><c> quotes</c><00:08:07.620><c> then</c>
+
+00:08:08.270 --> 00:08:08.280 align:start position:0%
+single quotes or double quotes then
+ 
+
+00:08:08.280 --> 00:08:11.870 align:start position:0%
+single quotes or double quotes then
+let's<00:08:08.460><c> display</c><00:08:08.639><c> these</c><00:08:09.060><c> for</c><00:08:09.360><c> practice</c>
+
+00:08:11.870 --> 00:08:11.880 align:start position:0%
+ 
+ 
+
+00:08:11.880 --> 00:08:14.210 align:start position:0%
+ 
+let's<00:08:12.660><c> say</c>
+
+00:08:14.210 --> 00:08:14.220 align:start position:0%
+let's say
+ 
+
+00:08:14.220 --> 00:08:17.150 align:start position:0%
+let's say
+hello
+
+00:08:17.150 --> 00:08:17.160 align:start position:0%
+ 
+ 
+
+00:08:17.160 --> 00:08:21.850 align:start position:0%
+ 
+our<00:08:17.699><c> variable</c><00:08:18.060><c> name</c>
+
+00:08:21.850 --> 00:08:21.860 align:start position:0%
+ 
+ 
+
+00:08:21.860 --> 00:08:30.070 align:start position:0%
+ 
+you<00:08:22.860><c> like</c><00:08:23.280><c> our</c><00:08:24.060><c> variable</c><00:08:24.419><c> food</c>
+
+00:08:30.070 --> 00:08:30.080 align:start position:0%
+ 
+ 
+
+00:08:30.080 --> 00:08:32.449 align:start position:0%
+ 
+your<00:08:31.080><c> email</c>
+
+00:08:32.449 --> 00:08:32.459 align:start position:0%
+your email
+ 
+
+00:08:32.459 --> 00:08:34.909 align:start position:0%
+your email
+is
+
+00:08:34.909 --> 00:08:34.919 align:start position:0%
+is
+ 
+
+00:08:34.919 --> 00:08:37.850 align:start position:0%
+is
+our<00:08:35.399><c> email</c><00:08:35.580><c> variable</c><00:08:36.060><c> hello</c><00:08:36.899><c> bro</c><00:08:37.260><c> you</c><00:08:37.620><c> like</c>
+
+00:08:37.850 --> 00:08:37.860 align:start position:0%
+our email variable hello bro you like
+ 
+
+00:08:37.860 --> 00:08:42.170 align:start position:0%
+our email variable hello bro you like
+pizza<00:08:38.159><c> your</c><00:08:38.940><c> email</c><00:08:39.180><c> is</c><00:08:39.620><c> bro123</c><00:08:40.620><c> gmail.com</c><00:08:41.520><c> so</c>
+
+00:08:42.170 --> 00:08:42.180 align:start position:0%
+pizza your email is bro123 gmail.com so
+ 
+
+00:08:42.180 --> 00:08:44.990 align:start position:0%
+pizza your email is bro123 gmail.com so
+those<00:08:42.360><c> are</c><00:08:42.539><c> strings</c><00:08:42.899><c> it's</c><00:08:43.740><c> a</c><00:08:44.099><c> series</c><00:08:44.339><c> of</c><00:08:44.760><c> text</c>
+
+00:08:44.990 --> 00:08:45.000 align:start position:0%
+those are strings it's a series of text
+ 
+
+00:08:45.000 --> 00:08:48.230 align:start position:0%
+those are strings it's a series of text
+okay<00:08:45.660><c> then</c><00:08:45.959><c> lastly</c><00:08:46.380><c> we</c><00:08:46.680><c> have</c><00:08:46.800><c> booleans</c><00:08:47.399><c> a</c>
+
+00:08:48.230 --> 00:08:48.240 align:start position:0%
+okay then lastly we have booleans a
+ 
+
+00:08:48.240 --> 00:08:50.870 align:start position:0%
+okay then lastly we have booleans a
+Boolean<00:08:48.660><c> is</c><00:08:49.080><c> either</c><00:08:49.320><c> true</c><00:08:49.860><c> or</c><00:08:50.100><c> false</c><00:08:50.580><c> it's</c>
+
+00:08:50.870 --> 00:08:50.880 align:start position:0%
+Boolean is either true or false it's
+ 
+
+00:08:50.880 --> 00:08:52.610 align:start position:0%
+Boolean is either true or false it's
+binary<00:08:51.360><c> it's</c><00:08:51.660><c> kind</c><00:08:51.839><c> of</c><00:08:51.959><c> like</c><00:08:52.080><c> a</c><00:08:52.200><c> light</c><00:08:52.380><c> switch</c>
+
+00:08:52.610 --> 00:08:52.620 align:start position:0%
+binary it's kind of like a light switch
+ 
+
+00:08:52.620 --> 00:08:54.889 align:start position:0%
+binary it's kind of like a light switch
+a<00:08:53.339><c> Boolean</c><00:08:53.700><c> variable</c><00:08:54.000><c> can</c><00:08:54.300><c> have</c><00:08:54.420><c> only</c><00:08:54.600><c> one</c><00:08:54.779><c> of</c>
+
+00:08:54.889 --> 00:08:54.899 align:start position:0%
+a Boolean variable can have only one of
+ 
+
+00:08:54.899 --> 00:08:57.350 align:start position:0%
+a Boolean variable can have only one of
+two<00:08:55.080><c> states</c><00:08:55.320><c> true</c><00:08:55.920><c> or</c><00:08:56.160><c> false</c><00:08:56.580><c> typically</c>
+
+00:08:57.350 --> 00:08:57.360 align:start position:0%
+two states true or false typically
+ 
+
+00:08:57.360 --> 00:08:59.509 align:start position:0%
+two states true or false typically
+booleans<00:08:57.959><c> are</c><00:08:58.200><c> used</c><00:08:58.380><c> internally</c><00:08:58.980><c> within</c><00:08:59.339><c> a</c>
+
+00:08:59.509 --> 00:08:59.519 align:start position:0%
+booleans are used internally within a
+ 
+
+00:08:59.519 --> 00:09:01.550 align:start position:0%
+booleans are used internally within a
+program<00:08:59.700><c> for</c><00:09:00.360><c> example</c><00:09:00.600><c> maybe</c><00:09:00.959><c> we</c><00:09:01.260><c> have</c><00:09:01.380><c> a</c>
+
+00:09:01.550 --> 00:09:01.560 align:start position:0%
+program for example maybe we have a
+ 
+
+00:09:01.560 --> 00:09:04.009 align:start position:0%
+program for example maybe we have a
+Boolean<00:09:01.980><c> variable</c><00:09:02.459><c> named</c><00:09:02.940><c> online</c><00:09:03.180><c> if</c>
+
+00:09:04.009 --> 00:09:04.019 align:start position:0%
+Boolean variable named online if
+ 
+
+00:09:04.019 --> 00:09:06.110 align:start position:0%
+Boolean variable named online if
+somebody<00:09:04.320><c> is</c><00:09:04.620><c> online</c><00:09:04.800><c> this</c><00:09:05.459><c> can</c><00:09:05.640><c> be</c><00:09:05.760><c> set</c><00:09:05.940><c> to</c>
+
+00:09:06.110 --> 00:09:06.120 align:start position:0%
+somebody is online this can be set to
+ 
+
+00:09:06.120 --> 00:09:08.509 align:start position:0%
+somebody is online this can be set to
+true<00:09:06.420><c> if</c><00:09:07.140><c> they're</c><00:09:07.260><c> offline</c><00:09:07.680><c> it</c><00:09:08.279><c> could</c><00:09:08.399><c> be</c>
+
+00:09:08.509 --> 00:09:08.519 align:start position:0%
+true if they're offline it could be
+ 
+
+00:09:08.519 --> 00:09:11.269 align:start position:0%
+true if they're offline it could be
+false<00:09:09.360><c> let's</c><00:09:09.899><c> set</c><00:09:10.140><c> that</c><00:09:10.320><c> to</c><00:09:10.440><c> true</c>
+
+00:09:11.269 --> 00:09:11.279 align:start position:0%
+false let's set that to true
+ 
+
+00:09:11.279 --> 00:09:15.350 align:start position:0%
+false let's set that to true
+what<00:09:11.820><c> if</c><00:09:11.940><c> something</c><00:09:12.240><c> is</c><00:09:12.720><c> for</c><00:09:13.019><c> sale</c><00:09:13.740><c> four</c><00:09:14.880><c> sale</c>
+
+00:09:15.350 --> 00:09:15.360 align:start position:0%
+what if something is for sale four sale
+ 
+
+00:09:15.360 --> 00:09:18.470 align:start position:0%
+what if something is for sale four sale
+if<00:09:16.140><c> it's</c><00:09:16.320><c> available</c><00:09:16.560><c> we</c><00:09:17.040><c> could</c><00:09:17.160><c> say</c><00:09:17.339><c> true</c><00:09:17.640><c> if</c>
+
+00:09:18.470 --> 00:09:18.480 align:start position:0%
+if it's available we could say true if
+ 
+
+00:09:18.480 --> 00:09:21.290 align:start position:0%
+if it's available we could say true if
+not<00:09:18.720><c> it's</c><00:09:19.380><c> false</c><00:09:19.800><c> it</c><00:09:20.399><c> only</c><00:09:20.580><c> has</c><00:09:20.760><c> two</c><00:09:21.000><c> states</c>
+
+00:09:21.290 --> 00:09:21.300 align:start position:0%
+not it's false it only has two states
+ 
+
+00:09:21.300 --> 00:09:23.990 align:start position:0%
+not it's false it only has two states
+then<00:09:22.080><c> what</c><00:09:22.260><c> about</c><00:09:22.440><c> running</c><00:09:22.920><c> is</c><00:09:23.399><c> some</c><00:09:23.640><c> process</c>
+
+00:09:23.990 --> 00:09:24.000 align:start position:0%
+then what about running is some process
+ 
+
+00:09:24.000 --> 00:09:28.190 align:start position:0%
+then what about running is some process
+running<00:09:24.380><c> running</c><00:09:25.380><c> equals</c><00:09:26.220><c> true</c><00:09:26.459><c> or</c><00:09:27.120><c> false</c>
+
+00:09:28.190 --> 00:09:28.200 align:start position:0%
+running running equals true or false
+ 
+
+00:09:28.200 --> 00:09:30.769 align:start position:0%
+running running equals true or false
+then<00:09:28.560><c> let's</c><00:09:28.740><c> print</c><00:09:28.980><c> these</c>
+
+00:09:30.769 --> 00:09:30.779 align:start position:0%
+then let's print these
+ 
+
+00:09:30.779 --> 00:09:32.990 align:start position:0%
+then let's print these
+print
+
+00:09:32.990 --> 00:09:33.000 align:start position:0%
+print
+ 
+
+00:09:33.000 --> 00:09:36.530 align:start position:0%
+print
+what<00:09:33.480><c> could</c><00:09:33.600><c> we</c><00:09:33.779><c> say</c><00:09:33.899><c> with</c><00:09:34.200><c> online</c>
+
+00:09:36.530 --> 00:09:36.540 align:start position:0%
+ 
+ 
+
+00:09:36.540 --> 00:09:41.210 align:start position:0%
+ 
+are<00:09:37.440><c> you</c><00:09:37.620><c> online</c>
+
+00:09:41.210 --> 00:09:41.220 align:start position:0%
+ 
+ 
+
+00:09:41.220 --> 00:09:46.130 align:start position:0%
+ 
+then<00:09:41.700><c> let's</c><00:09:42.000><c> print</c><00:09:42.240><c> our</c><00:09:42.480><c> variable</c><00:09:42.839><c> online</c>
+
+00:09:46.130 --> 00:09:46.140 align:start position:0%
+ 
+ 
+
+00:09:46.140 --> 00:09:49.430 align:start position:0%
+ 
+print
+
+00:09:49.430 --> 00:09:49.440 align:start position:0%
+ 
+ 
+
+00:09:49.440 --> 00:09:51.829 align:start position:0%
+ 
+is<00:09:50.279><c> the</c>
+
+00:09:51.829 --> 00:09:51.839 align:start position:0%
+is the
+ 
+
+00:09:51.839 --> 00:09:56.990 align:start position:0%
+is the
+item<00:09:52.740><c> for</c><00:09:53.279><c> sale</c>
+
+00:09:56.990 --> 00:09:57.000 align:start position:0%
+ 
+ 
+
+00:09:57.000 --> 00:10:02.690 align:start position:0%
+ 
+for<00:09:57.720><c> sale</c>
+
+00:10:02.690 --> 00:10:02.700 align:start position:0%
+ 
+ 
+
+00:10:02.700 --> 00:10:04.970 align:start position:0%
+ 
+perhaps<00:10:03.180><c> running</c><00:10:03.420><c> refers</c><00:10:03.899><c> to</c><00:10:04.080><c> a</c><00:10:04.260><c> game</c><00:10:04.440><c> is</c><00:10:04.740><c> the</c>
+
+00:10:04.970 --> 00:10:04.980 align:start position:0%
+perhaps running refers to a game is the
+ 
+
+00:10:04.980 --> 00:10:10.730 align:start position:0%
+perhaps running refers to a game is the
+game<00:10:05.100><c> running</c><00:10:05.540><c> game</c><00:10:06.540><c> running</c><00:10:07.500><c> colon</c><00:10:08.459><c> space</c>
+
+00:10:10.730 --> 00:10:10.740 align:start position:0%
+game running game running colon space
+ 
+
+00:10:10.740 --> 00:10:13.850 align:start position:0%
+game running game running colon space
+our<00:10:11.100><c> running</c><00:10:11.279><c> variable</c>
+
+00:10:13.850 --> 00:10:13.860 align:start position:0%
+ 
+ 
+
+00:10:13.860 --> 00:10:16.670 align:start position:0%
+ 
+so<00:10:14.279><c> are</c><00:10:14.519><c> you</c><00:10:14.640><c> online</c><00:10:14.880><c> true</c><00:10:15.600><c> is</c><00:10:16.080><c> the</c><00:10:16.260><c> item</c><00:10:16.500><c> for</c>
+
+00:10:16.670 --> 00:10:16.680 align:start position:0%
+so are you online true is the item for
+ 
+
+00:10:16.680 --> 00:10:19.790 align:start position:0%
+so are you online true is the item for
+sale<00:10:16.920><c> false</c><00:10:17.700><c> game</c><00:10:18.060><c> running</c><00:10:18.300><c> true</c><00:10:18.800><c> typically</c>
+
+00:10:19.790 --> 00:10:19.800 align:start position:0%
+sale false game running true typically
+ 
+
+00:10:19.800 --> 00:10:22.070 align:start position:0%
+sale false game running true typically
+with<00:10:20.040><c> booleans</c><00:10:20.580><c> you</c><00:10:21.000><c> use</c><00:10:21.180><c> these</c><00:10:21.600><c> internally</c>
+
+00:10:22.070 --> 00:10:22.080 align:start position:0%
+with booleans you use these internally
+ 
+
+00:10:22.080 --> 00:10:24.949 align:start position:0%
+with booleans you use these internally
+it's<00:10:22.980><c> not</c><00:10:23.279><c> common</c><00:10:23.580><c> to</c><00:10:24.060><c> print</c><00:10:24.240><c> them</c><00:10:24.480><c> directly</c>
+
+00:10:24.949 --> 00:10:24.959 align:start position:0%
+it's not common to print them directly
+ 
+
+00:10:24.959 --> 00:10:27.290 align:start position:0%
+it's not common to print them directly
+usually<00:10:25.860><c> we</c><00:10:26.160><c> would</c><00:10:26.279><c> use</c><00:10:26.519><c> these</c><00:10:26.820><c> with</c><00:10:27.060><c> if</c>
+
+00:10:27.290 --> 00:10:27.300 align:start position:0%
+usually we would use these with if
+ 
+
+00:10:27.300 --> 00:10:28.550 align:start position:0%
+usually we would use these with if
+statements
+
+00:10:28.550 --> 00:10:28.560 align:start position:0%
+statements
+ 
+
+00:10:28.560 --> 00:10:32.750 align:start position:0%
+statements
+such<00:10:29.220><c> as</c><00:10:29.540><c> if</c><00:10:30.540><c> then</c><00:10:31.200><c> the</c><00:10:31.440><c> Boolean</c><00:10:31.800><c> if</c><00:10:32.580><c> some</c>
+
+00:10:32.750 --> 00:10:32.760 align:start position:0%
+such as if then the Boolean if some
+ 
+
+00:10:32.760 --> 00:10:36.769 align:start position:0%
+such as if then the Boolean if some
+process<00:10:33.120><c> is</c><00:10:33.300><c> running</c><00:10:33.740><c> print</c><00:10:34.740><c> the</c><00:10:35.700><c> game</c><00:10:36.060><c> is</c>
+
+00:10:36.769 --> 00:10:36.779 align:start position:0%
+process is running print the game is
+ 
+
+00:10:36.779 --> 00:10:39.650 align:start position:0%
+process is running print the game is
+running
+
+00:10:39.650 --> 00:10:39.660 align:start position:0%
+ 
+ 
+
+00:10:39.660 --> 00:10:41.150 align:start position:0%
+ 
+else
+
+00:10:41.150 --> 00:10:41.160 align:start position:0%
+else
+ 
+
+00:10:41.160 --> 00:10:43.850 align:start position:0%
+else
+print
+
+00:10:43.850 --> 00:10:43.860 align:start position:0%
+ 
+ 
+
+00:10:43.860 --> 00:10:47.150 align:start position:0%
+ 
+the<00:10:44.579><c> game</c><00:10:44.880><c> is</c><00:10:45.420><c> over</c>
+
+00:10:47.150 --> 00:10:47.160 align:start position:0%
+the game is over
+ 
+
+00:10:47.160 --> 00:10:48.110 align:start position:0%
+the game is over
+I'm<00:10:47.220><c> just</c><00:10:47.339><c> going</c><00:10:47.519><c> to</c><00:10:47.640><c> turn</c><00:10:47.820><c> these</c><00:10:48.060><c> into</c>
+
+00:10:48.110 --> 00:10:48.120 align:start position:0%
+I'm just going to turn these into
+ 
+
+00:10:48.120 --> 00:10:49.730 align:start position:0%
+I'm just going to turn these into
+comments
+
+00:10:49.730 --> 00:10:49.740 align:start position:0%
+comments
+ 
+
+00:10:49.740 --> 00:10:52.130 align:start position:0%
+comments
+so<00:10:50.220><c> if</c><00:10:50.459><c> running</c><00:10:50.700><c> is</c><00:10:51.000><c> true</c><00:10:51.240><c> the</c><00:10:51.779><c> game</c><00:10:51.959><c> is</c>
+
+00:10:52.130 --> 00:10:52.140 align:start position:0%
+so if running is true the game is
+ 
+
+00:10:52.140 --> 00:10:54.769 align:start position:0%
+so if running is true the game is
+running<00:10:52.320><c> if</c><00:10:53.160><c> it's</c><00:10:53.339><c> false</c>
+
+00:10:54.769 --> 00:10:54.779 align:start position:0%
+running if it's false
+ 
+
+00:10:54.779 --> 00:10:56.329 align:start position:0%
+running if it's false
+you<00:10:55.200><c> would</c><00:10:55.260><c> do</c><00:10:55.440><c> something</c><00:10:55.620><c> else</c><00:10:55.800><c> the</c><00:10:56.040><c> game</c><00:10:56.220><c> is</c>
+
+00:10:56.329 --> 00:10:56.339 align:start position:0%
+you would do something else the game is
+ 
+
+00:10:56.339 --> 00:10:58.430 align:start position:0%
+you would do something else the game is
+over<00:10:56.519><c> but</c><00:10:57.060><c> I'll</c><00:10:57.240><c> discuss</c><00:10:57.540><c> this</c><00:10:57.779><c> more</c><00:10:57.959><c> when</c><00:10:58.260><c> we</c>
+
+00:10:58.430 --> 00:10:58.440 align:start position:0%
+over but I'll discuss this more when we
+ 
+
+00:10:58.440 --> 00:11:00.230 align:start position:0%
+over but I'll discuss this more when we
+reach<00:10:58.680><c> if</c><00:10:58.860><c> statements</c><00:10:59.519><c> you</c><00:10:59.880><c> don't</c><00:11:00.000><c> need</c><00:11:00.120><c> to</c>
+
+00:11:00.230 --> 00:11:00.240 align:start position:0%
+reach if statements you don't need to
+ 
+
+00:11:00.240 --> 00:11:01.850 align:start position:0%
+reach if statements you don't need to
+know<00:11:00.360><c> them</c><00:11:00.540><c> at</c><00:11:00.720><c> this</c><00:11:00.839><c> point</c><00:11:01.019><c> in</c><00:11:01.140><c> time</c><00:11:01.320><c> just</c>
+
+00:11:01.850 --> 00:11:01.860 align:start position:0%
+know them at this point in time just
+ 
+
+00:11:01.860 --> 00:11:03.949 align:start position:0%
+know them at this point in time just
+understand<00:11:02.040><c> for</c><00:11:02.519><c> now</c><00:11:02.700><c> a</c><00:11:03.120><c> Boolean</c><00:11:03.540><c> is</c><00:11:03.779><c> either</c>
+
+00:11:03.949 --> 00:11:03.959 align:start position:0%
+understand for now a Boolean is either
+ 
+
+00:11:03.959 --> 00:11:07.370 align:start position:0%
+understand for now a Boolean is either
+true<00:11:04.380><c> or</c><00:11:04.920><c> false</c><00:11:05.399><c> oh</c><00:11:05.940><c> here's</c><00:11:06.300><c> another</c><00:11:06.420><c> thing</c><00:11:06.779><c> a</c>
+
+00:11:07.370 --> 00:11:07.380 align:start position:0%
+true or false oh here's another thing a
+ 
+
+00:11:07.380 --> 00:11:08.930 align:start position:0%
+true or false oh here's another thing a
+common<00:11:07.500><c> mistake</c><00:11:07.920><c> that</c><00:11:08.220><c> people</c><00:11:08.399><c> do</c><00:11:08.640><c> with</c>
+
+00:11:08.930 --> 00:11:08.940 align:start position:0%
+common mistake that people do with
+ 
+
+00:11:08.940 --> 00:11:10.790 align:start position:0%
+common mistake that people do with
+booleans<00:11:09.420><c> is</c><00:11:09.839><c> that</c><00:11:10.019><c> they</c><00:11:10.260><c> may</c><00:11:10.380><c> put</c><00:11:10.620><c> them</c>
+
+00:11:10.790 --> 00:11:10.800 align:start position:0%
+booleans is that they may put them
+ 
+
+00:11:10.800 --> 00:11:12.590 align:start position:0%
+booleans is that they may put them
+within<00:11:11.220><c> quotes</c>
+
+00:11:12.590 --> 00:11:12.600 align:start position:0%
+within quotes
+ 
+
+00:11:12.600 --> 00:11:14.269 align:start position:0%
+within quotes
+you<00:11:13.079><c> can</c><00:11:13.200><c> see</c><00:11:13.320><c> that</c><00:11:13.500><c> the</c><00:11:13.740><c> color</c><00:11:13.860><c> scheme</c>
+
+00:11:14.269 --> 00:11:14.279 align:start position:0%
+you can see that the color scheme
+ 
+
+00:11:14.279 --> 00:11:16.490 align:start position:0%
+you can see that the color scheme
+changed<00:11:14.640><c> this</c><00:11:15.420><c> is</c><00:11:15.600><c> technically</c><00:11:15.959><c> a</c><00:11:16.260><c> string</c>
+
+00:11:16.490 --> 00:11:16.500 align:start position:0%
+changed this is technically a string
+ 
+
+00:11:16.500 --> 00:11:19.009 align:start position:0%
+changed this is technically a string
+it's<00:11:16.740><c> within</c><00:11:17.160><c> quotes</c><00:11:17.399><c> so</c><00:11:18.300><c> that's</c><00:11:18.540><c> a</c><00:11:18.899><c> common</c>
+
+00:11:19.009 --> 00:11:19.019 align:start position:0%
+it's within quotes so that's a common
+ 
+
+00:11:19.019 --> 00:11:21.230 align:start position:0%
+it's within quotes so that's a common
+mistake<00:11:19.500><c> that</c><00:11:19.800><c> people</c><00:11:19.980><c> might</c><00:11:20.279><c> make</c><00:11:20.519><c> if</c><00:11:21.120><c> you're</c>
+
+00:11:21.230 --> 00:11:21.240 align:start position:0%
+mistake that people might make if you're
+ 
+
+00:11:21.240 --> 00:11:22.850 align:start position:0%
+mistake that people might make if you're
+writing<00:11:21.540><c> a</c><00:11:21.660><c> Boolean</c><00:11:22.019><c> make</c><00:11:22.380><c> sure</c><00:11:22.500><c> it's</c><00:11:22.680><c> not</c>
+
+00:11:22.850 --> 00:11:22.860 align:start position:0%
+writing a Boolean make sure it's not
+ 
+
+00:11:22.860 --> 00:11:25.190 align:start position:0%
+writing a Boolean make sure it's not
+within<00:11:23.220><c> quotes</c><00:11:23.459><c> and</c><00:11:24.240><c> the</c><00:11:24.480><c> first</c><00:11:24.600><c> letter</c><00:11:24.839><c> is</c>
+
+00:11:25.190 --> 00:11:25.200 align:start position:0%
+within quotes and the first letter is
+ 
+
+00:11:25.200 --> 00:11:26.569 align:start position:0%
+within quotes and the first letter is
+capital
+
+00:11:26.569 --> 00:11:26.579 align:start position:0%
+capital
+ 
+
+00:11:26.579 --> 00:11:28.490 align:start position:0%
+capital
+before<00:11:27.000><c> I</c><00:11:27.300><c> wrap</c><00:11:27.480><c> things</c><00:11:27.660><c> up</c><00:11:27.899><c> I'm</c><00:11:28.200><c> going</c><00:11:28.380><c> to</c>
+
+00:11:28.490 --> 00:11:28.500 align:start position:0%
+before I wrap things up I'm going to
+ 
+
+00:11:28.500 --> 00:11:30.110 align:start position:0%
+before I wrap things up I'm going to
+show<00:11:28.680><c> you</c><00:11:28.860><c> a</c><00:11:29.100><c> few</c><00:11:29.220><c> tips</c><00:11:29.519><c> and</c><00:11:29.640><c> tricks</c><00:11:29.940><c> with</c>
+
+00:11:30.110 --> 00:11:30.120 align:start position:0%
+show you a few tips and tricks with
+ 
+
+00:11:30.120 --> 00:11:31.850 align:start position:0%
+show you a few tips and tricks with
+variables<00:11:30.720><c> suppose</c><00:11:31.440><c> we</c><00:11:31.620><c> have</c><00:11:31.680><c> three</c>
+
+00:11:31.850 --> 00:11:31.860 align:start position:0%
+variables suppose we have three
+ 
+
+00:11:31.860 --> 00:11:36.410 align:start position:0%
+variables suppose we have three
+variables<00:11:32.399><c> x</c><00:11:33.240><c> equals</c><00:11:33.720><c> one</c><00:11:33.959><c> y</c><00:11:34.800><c> equals</c><00:11:35.279><c> two</c><00:11:35.519><c> Z</c>
+
+00:11:36.410 --> 00:11:36.420 align:start position:0%
+variables x equals one y equals two Z
+ 
+
+00:11:36.420 --> 00:11:38.269 align:start position:0%
+variables x equals one y equals two Z
+equals<00:11:36.899><c> three</c><00:11:37.140><c> then</c><00:11:37.680><c> I'll</c><00:11:37.800><c> print</c><00:11:37.980><c> these</c>
+
+00:11:38.269 --> 00:11:38.279 align:start position:0%
+equals three then I'll print these
+ 
+
+00:11:38.279 --> 00:11:41.750 align:start position:0%
+equals three then I'll print these
+variables<00:11:38.640><c> directly</c><00:11:39.060><c> print</c><00:11:39.959><c> X</c>
+
+00:11:41.750 --> 00:11:41.760 align:start position:0%
+variables directly print X
+ 
+
+00:11:41.760 --> 00:11:44.329 align:start position:0%
+variables directly print X
+print<00:11:42.540><c> why</c>
+
+00:11:44.329 --> 00:11:44.339 align:start position:0%
+print why
+ 
+
+00:11:44.339 --> 00:11:48.050 align:start position:0%
+print why
+print<00:11:45.120><c> Z</c><00:11:45.899><c> this</c><00:11:46.620><c> would</c><00:11:46.740><c> result</c><00:11:46.980><c> in</c><00:11:47.519><c> one</c><00:11:47.820><c> two</c>
+
+00:11:48.050 --> 00:11:48.060 align:start position:0%
+print Z this would result in one two
+ 
+
+00:11:48.060 --> 00:11:50.750 align:start position:0%
+print Z this would result in one two
+three<00:11:48.300><c> another</c><00:11:48.959><c> possibility</c><00:11:49.620><c> in</c><00:11:50.399><c> place</c><00:11:50.579><c> of</c>
+
+00:11:50.750 --> 00:11:50.760 align:start position:0%
+three another possibility in place of
+ 
+
+00:11:50.760 --> 00:11:52.550 align:start position:0%
+three another possibility in place of
+assigning<00:11:51.180><c> these</c><00:11:51.420><c> variables</c><00:11:51.899><c> on</c><00:11:52.200><c> separate</c>
+
+00:11:52.550 --> 00:11:52.560 align:start position:0%
+assigning these variables on separate
+ 
+
+00:11:52.560 --> 00:11:55.790 align:start position:0%
+assigning these variables on separate
+lines<00:11:52.860><c> you</c><00:11:53.459><c> could</c><00:11:53.519><c> do</c><00:11:53.760><c> so</c><00:11:53.880><c> all</c><00:11:54.300><c> on</c><00:11:54.480><c> one</c><00:11:54.720><c> line</c><00:11:54.959><c> we</c>
+
+00:11:55.790 --> 00:11:55.800 align:start position:0%
+lines you could do so all on one line we
+ 
+
+00:11:55.800 --> 00:12:01.190 align:start position:0%
+lines you could do so all on one line we
+could<00:11:55.920><c> write</c><00:11:56.360><c> X</c><00:11:57.360><c> comma</c><00:11:57.899><c> y</c><00:11:58.200><c> comma</c><00:11:59.040><c> Z</c><00:11:59.360><c> equals</c><00:12:00.360><c> one</c>
+
+00:12:01.190 --> 00:12:01.200 align:start position:0%
+could write X comma y comma Z equals one
+ 
+
+00:12:01.200 --> 00:12:03.889 align:start position:0%
+could write X comma y comma Z equals one
+comma<00:12:01.740><c> two</c><00:12:01.980><c> comma</c><00:12:02.820><c> three</c><00:12:03.000><c> that</c><00:12:03.540><c> would</c><00:12:03.660><c> do</c><00:12:03.779><c> the</c>
+
+00:12:03.889 --> 00:12:03.899 align:start position:0%
+comma two comma three that would do the
+ 
+
+00:12:03.899 --> 00:12:05.990 align:start position:0%
+comma two comma three that would do the
+same<00:12:04.079><c> thing</c><00:12:04.260><c> and</c><00:12:04.680><c> it</c><00:12:04.860><c> only</c><00:12:04.980><c> takes</c><00:12:05.279><c> one</c><00:12:05.640><c> line</c><00:12:05.820><c> of</c>
+
+00:12:05.990 --> 00:12:06.000 align:start position:0%
+same thing and it only takes one line of
+ 
+
+00:12:06.000 --> 00:12:08.630 align:start position:0%
+same thing and it only takes one line of
+code<00:12:06.180><c> this</c><00:12:06.959><c> is</c><00:12:07.079><c> referred</c><00:12:07.500><c> to</c><00:12:07.620><c> as</c><00:12:08.040><c> multiple</c>
+
+00:12:08.630 --> 00:12:08.640 align:start position:0%
+code this is referred to as multiple
+ 
+
+00:12:08.640 --> 00:12:10.850 align:start position:0%
+code this is referred to as multiple
+assignment<00:12:09.120><c> if</c><00:12:09.839><c> you</c><00:12:10.019><c> ever</c><00:12:10.140><c> need</c><00:12:10.440><c> to</c><00:12:10.620><c> set</c>
+
+00:12:10.850 --> 00:12:10.860 align:start position:0%
+assignment if you ever need to set
+ 
+
+00:12:10.860 --> 00:12:12.889 align:start position:0%
+assignment if you ever need to set
+multiple<00:12:11.519><c> variables</c><00:12:12.000><c> to</c><00:12:12.300><c> the</c><00:12:12.420><c> same</c><00:12:12.600><c> value</c>
+
+00:12:12.889 --> 00:12:12.899 align:start position:0%
+multiple variables to the same value
+ 
+
+00:12:12.899 --> 00:12:16.130 align:start position:0%
+multiple variables to the same value
+this<00:12:13.800><c> is</c><00:12:13.920><c> what</c><00:12:14.100><c> you</c><00:12:14.220><c> could</c><00:12:14.339><c> do</c><00:12:15.000><c> I</c><00:12:15.600><c> need</c><00:12:15.779><c> to</c><00:12:15.959><c> set</c>
+
+00:12:16.130 --> 00:12:16.140 align:start position:0%
+this is what you could do I need to set
+ 
+
+00:12:16.140 --> 00:12:18.949 align:start position:0%
+this is what you could do I need to set
+X<00:12:16.440><c> Y</c><00:12:16.680><c> and</c><00:12:16.860><c> Z</c><00:12:17.040><c> all</c><00:12:17.519><c> to</c><00:12:17.760><c> zero</c><00:12:18.120><c> maybe</c><00:12:18.540><c> they</c><00:12:18.839><c> are</c>
+
+00:12:18.949 --> 00:12:18.959 align:start position:0%
+X Y and Z all to zero maybe they are
+ 
+
+00:12:18.959 --> 00:12:20.750 align:start position:0%
+X Y and Z all to zero maybe they are
+coordinates<00:12:19.260><c> or</c><00:12:19.500><c> something</c>
+
+00:12:20.750 --> 00:12:20.760 align:start position:0%
+coordinates or something
+ 
+
+00:12:20.760 --> 00:12:24.370 align:start position:0%
+coordinates or something
+what<00:12:21.180><c> I</c><00:12:21.360><c> would</c><00:12:21.540><c> instead</c><00:12:21.839><c> type</c><00:12:22.079><c> is</c><00:12:22.500><c> x</c><00:12:23.100><c> equals</c><00:12:23.940><c> y</c>
+
+00:12:24.370 --> 00:12:24.380 align:start position:0%
+what I would instead type is x equals y
+ 
+
+00:12:24.380 --> 00:12:30.110 align:start position:0%
+what I would instead type is x equals y
+equals<00:12:25.380><c> z</c><00:12:25.820><c> equals</c><00:12:26.820><c> zero</c><00:12:27.660><c> or</c><00:12:27.899><c> some</c><00:12:28.019><c> other</c><00:12:28.200><c> value</c>
+
+00:12:30.110 --> 00:12:30.120 align:start position:0%
+equals z equals zero or some other value
+ 
+
+00:12:30.120 --> 00:12:33.530 align:start position:0%
+equals z equals zero or some other value
+so<00:12:30.480><c> x</c><00:12:30.779><c> y</c><00:12:31.019><c> and</c><00:12:31.260><c> z</c><00:12:31.440><c> are</c><00:12:31.800><c> all</c><00:12:31.980><c> zero</c><00:12:32.519><c> if</c><00:12:33.060><c> I</c><00:12:33.240><c> were</c><00:12:33.360><c> to</c>
+
+00:12:33.530 --> 00:12:33.540 align:start position:0%
+so x y and z are all zero if I were to
+ 
+
+00:12:33.540 --> 00:12:36.290 align:start position:0%
+so x y and z are all zero if I were to
+change<00:12:33.720><c> this</c><00:12:34.079><c> number</c><00:12:34.200><c> to</c><00:12:34.560><c> one</c><00:12:34.760><c> well</c><00:12:35.760><c> they</c><00:12:36.060><c> all</c>
+
+00:12:36.290 --> 00:12:36.300 align:start position:0%
+change this number to one well they all
+ 
+
+00:12:36.300 --> 00:12:38.870 align:start position:0%
+change this number to one well they all
+equal<00:12:36.540><c> one</c><00:12:36.959><c> that's</c><00:12:37.560><c> how</c><00:12:37.800><c> to</c><00:12:37.980><c> set</c><00:12:38.220><c> multiple</c>
+
+00:12:38.870 --> 00:12:38.880 align:start position:0%
+equal one that's how to set multiple
+ 
+
+00:12:38.880 --> 00:12:41.449 align:start position:0%
+equal one that's how to set multiple
+variables<00:12:39.420><c> to</c><00:12:39.720><c> the</c><00:12:39.839><c> same</c><00:12:40.019><c> value</c><00:12:40.260><c> variable</c><00:12:41.160><c> one</c>
+
+00:12:41.449 --> 00:12:41.459 align:start position:0%
+variables to the same value variable one
+ 
+
+00:12:41.459 --> 00:12:44.629 align:start position:0%
+variables to the same value variable one
+equals<00:12:42.240><c> variable</c><00:12:42.600><c> two</c><00:12:42.920><c> equals</c><00:12:43.920><c> however</c><00:12:44.459><c> many</c>
+
+00:12:44.629 --> 00:12:44.639 align:start position:0%
+equals variable two equals however many
+ 
+
+00:12:44.639 --> 00:12:46.430 align:start position:0%
+equals variable two equals however many
+more<00:12:44.940><c> variables</c><00:12:45.420><c> you</c><00:12:45.540><c> have</c><00:12:45.720><c> all</c><00:12:46.260><c> right</c>
+
+00:12:46.430 --> 00:12:46.440 align:start position:0%
+more variables you have all right
+ 
+
+00:12:46.440 --> 00:12:48.889 align:start position:0%
+more variables you have all right
+everybody<00:12:46.740><c> those</c><00:12:47.339><c> are</c><00:12:47.639><c> variables</c><00:12:48.180><c> a</c><00:12:48.600><c> variable</c>
+
+00:12:48.889 --> 00:12:48.899 align:start position:0%
+everybody those are variables a variable
+ 
+
+00:12:48.899 --> 00:12:51.290 align:start position:0%
+everybody those are variables a variable
+is<00:12:49.260><c> a</c><00:12:49.500><c> reusable</c><00:12:49.860><c> container</c><00:12:50.399><c> for</c><00:12:50.760><c> storing</c><00:12:51.120><c> a</c>
+
+00:12:51.290 --> 00:12:51.300 align:start position:0%
+is a reusable container for storing a
+ 
+
+00:12:51.300 --> 00:12:54.050 align:start position:0%
+is a reusable container for storing a
+value<00:12:51.480><c> a</c><00:12:52.380><c> variable</c><00:12:52.740><c> behaves</c><00:12:53.339><c> as</c><00:12:53.639><c> if</c><00:12:53.760><c> it</c><00:12:53.880><c> were</c>
+
+00:12:54.050 --> 00:12:54.060 align:start position:0%
+value a variable behaves as if it were
+ 
+
+00:12:54.060 --> 00:12:56.389 align:start position:0%
+value a variable behaves as if it were
+the<00:12:54.240><c> value</c><00:12:54.420><c> it</c><00:12:54.660><c> contains</c><00:12:55.139><c> we</c><00:12:55.800><c> discussed</c><00:12:56.220><c> four</c>
+
+00:12:56.389 --> 00:12:56.399 align:start position:0%
+the value it contains we discussed four
+ 
+
+00:12:56.399 --> 00:12:59.389 align:start position:0%
+the value it contains we discussed four
+data<00:12:56.880><c> types</c><00:12:57.320><c> integers</c><00:12:58.320><c> which</c><00:12:59.040><c> are</c><00:12:59.220><c> whole</c>
+
+00:12:59.389 --> 00:12:59.399 align:start position:0%
+data types integers which are whole
+ 
+
+00:12:59.399 --> 00:13:00.350 align:start position:0%
+data types integers which are whole
+numbers
+
+00:13:00.350 --> 00:13:00.360 align:start position:0%
+numbers
+ 
+
+00:13:00.360 --> 00:13:03.050 align:start position:0%
+numbers
+floats<00:13:01.200><c> which</c><00:13:01.860><c> are</c><00:13:01.980><c> numbers</c><00:13:02.220><c> that</c><00:13:02.639><c> contain</c><00:13:02.880><c> a</c>
+
+00:13:03.050 --> 00:13:03.060 align:start position:0%
+floats which are numbers that contain a
+ 
+
+00:13:03.060 --> 00:13:04.430 align:start position:0%
+floats which are numbers that contain a
+decimal<00:13:03.360><c> portion</c>
+
+00:13:04.430 --> 00:13:04.440 align:start position:0%
+decimal portion
+ 
+
+00:13:04.440 --> 00:13:07.730 align:start position:0%
+decimal portion
+strings<00:13:05.100><c> which</c><00:13:05.760><c> are</c><00:13:06.060><c> a</c><00:13:06.300><c> series</c><00:13:06.540><c> of</c><00:13:06.899><c> text</c><00:13:07.139><c> like</c>
+
+00:13:07.730 --> 00:13:07.740 align:start position:0%
+strings which are a series of text like
+ 
+
+00:13:07.740 --> 00:13:10.490 align:start position:0%
+strings which are a series of text like
+a<00:13:07.980><c> name</c><00:13:08.100><c> or</c><00:13:08.339><c> an</c><00:13:08.459><c> email</c><00:13:08.639><c> and</c><00:13:09.420><c> booleans</c><00:13:10.019><c> which</c>
+
+00:13:10.490 --> 00:13:10.500 align:start position:0%
+a name or an email and booleans which
+ 
+
+00:13:10.500 --> 00:13:13.129 align:start position:0%
+a name or an email and booleans which
+are<00:13:10.680><c> either</c><00:13:10.920><c> true</c><00:13:11.459><c> or</c><00:13:11.820><c> false</c><00:13:12.240><c> they're</c><00:13:12.660><c> binary</c>
+
+00:13:13.129 --> 00:13:13.139 align:start position:0%
+are either true or false they're binary
+ 
+
+00:13:13.139 --> 00:13:14.990 align:start position:0%
+are either true or false they're binary
+so<00:13:13.680><c> yeah</c><00:13:13.860><c> that's</c><00:13:14.100><c> an</c><00:13:14.339><c> introduction</c><00:13:14.700><c> to</c>
+
+00:13:14.990 --> 00:13:15.000 align:start position:0%
+so yeah that's an introduction to
+ 
+
+00:13:15.000 --> 00:13:16.970 align:start position:0%
+so yeah that's an introduction to
+variables<00:13:15.600><c> in</c><00:13:15.720><c> python</c><00:13:16.200><c> in</c><00:13:16.620><c> the</c><00:13:16.680><c> comments</c>
+
+00:13:16.970 --> 00:13:16.980 align:start position:0%
+variables in python in the comments
+ 
+
+00:13:16.980 --> 00:13:18.350 align:start position:0%
+variables in python in the comments
+section<00:13:17.160><c> why</c><00:13:17.519><c> don't</c><00:13:17.700><c> you</c><00:13:17.820><c> post</c><00:13:18.060><c> four</c>
+
+00:13:18.350 --> 00:13:18.360 align:start position:0%
+section why don't you post four
+ 
+
+00:13:18.360 --> 00:13:22.009 align:start position:0%
+section why don't you post four
+variables<00:13:18.959><c> an</c><00:13:19.380><c> integer</c><00:13:19.860><c> a</c><00:13:20.399><c> float</c><00:13:20.820><c> a</c><00:13:21.720><c> string</c>
+
+00:13:22.009 --> 00:13:22.019 align:start position:0%
+variables an integer a float a string
+ 
+
+00:13:22.019 --> 00:13:23.990 align:start position:0%
+variables an integer a float a string
+and<00:13:22.320><c> a</c><00:13:22.440><c> Boolean</c><00:13:22.860><c> try</c><00:13:23.279><c> and</c><00:13:23.399><c> think</c><00:13:23.519><c> of</c><00:13:23.639><c> a</c><00:13:23.820><c> unique</c>
+
+00:13:23.990 --> 00:13:24.000 align:start position:0%
+and a Boolean try and think of a unique
+ 
+
+00:13:24.000 --> 00:13:26.030 align:start position:0%
+and a Boolean try and think of a unique
+example<00:13:24.420><c> that</c><00:13:24.660><c> I</c><00:13:24.779><c> didn't</c><00:13:24.899><c> cover</c><00:13:25.139><c> already</c><00:13:25.440><c> so</c>
+
+00:13:26.030 --> 00:13:26.040 align:start position:0%
+example that I didn't cover already so
+ 
+
+00:13:26.040 --> 00:13:30.260 align:start position:0%
+example that I didn't cover already so
+yeah<00:13:26.220><c> those</c><00:13:26.579><c> are</c><00:13:26.820><c> variables</c><00:13:27.420><c> in</c><00:13:27.779><c> Python</c>
+
