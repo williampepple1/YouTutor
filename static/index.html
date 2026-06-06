@@ -686,6 +686,9 @@
 </div>
 
 <script>
+// ── API base URL (change for S3 hosting, keep empty for local dev) ─
+const API_BASE = 'https://oukon0onq0.execute-api.us-east-1.amazonaws.com';
+
 // ── YouTube IFrame API ───────────────────────────────────────────
 let ytPlayer = null;
 let pendingVideoId = null;
@@ -785,7 +788,7 @@ async function doSearch(query) {
   emptyState.style.display = 'none';
 
   try {
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&max_results=12`);
+    const res = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}&max_results=12`);
     const data = await res.json();
     renderVideos(data.videos || []);
   } catch (e) {
@@ -853,7 +856,7 @@ async function loadVideo(videoId, title, channel) {
 
   // Fetch transcript
   try {
-    const res = await fetch(`/api/transcript/${videoId}`);
+    const res = await fetch(`${API_BASE}/api/transcript/${videoId}`);
     const data = await res.json();
     if (!res.ok || data.detail) {
       throw new Error(data.detail || `HTTP ${res.status}`);
@@ -927,7 +930,7 @@ async function sendChat() {
   const typing = addChatMessage('Thinking...', 'typing');
 
   try {
-    const res = await fetch('/api/ask', {
+    const res = await fetch(`${API_BASE}/api/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1085,7 +1088,7 @@ document.getElementById('settingsTest').addEventListener('click', async () => {
   status.textContent = '⏳ Testing connection...';
 
   try {
-    const res = await fetch('/api/ask', {
+    const res = await fetch(`${API_BASE}/api/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1131,7 +1134,7 @@ document.getElementById('transcriptPane').addEventListener('click', async (e) =>
   btn.textContent = '⏳ Downloading audio...';
 
   try {
-    const res = await fetch(`/api/generate-transcript/${videoId}`, {
+    const res = await fetch(`${API_BASE}/api/generate-transcript/${videoId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ api_key: whisperKey }),

@@ -1,0 +1,96 @@
+{
+  "DistributionConfig": {
+    "CallerReference": "yoututor-deploy-1",
+    "Aliases": {
+      "Quantity": 0
+    },
+    "DefaultRootObject": "index.html",
+    "Origins": {
+      "Quantity": 2,
+      "Items": [
+        {
+          "Id": "S3Frontend",
+          "DomainName": "yoututor-628711466156.s3.us-east-1.amazonaws.com",
+          "S3OriginConfig": {
+            "OriginAccessIdentity": ""
+          }
+        },
+        {
+          "Id": "APIGateway",
+          "DomainName": "oukon0onq0.execute-api.us-east-1.amazonaws.com",
+          "CustomOriginConfig": {
+            "HTTPPort": 80,
+            "HTTPSPort": 443,
+            "OriginProtocolPolicy": "https-only",
+            "OriginSslProtocols": {
+              "Quantity": 1,
+              "Items": ["TLSv1.2"]
+            }
+          }
+        }
+      ]
+    },
+    "DefaultCacheBehavior": {
+      "TargetOriginId": "S3Frontend",
+      "ViewerProtocolPolicy": "redirect-to-https",
+      "AllowedMethods": {
+        "Quantity": 2,
+        "Items": ["GET", "HEAD"],
+        "CachedMethods": {
+          "Quantity": 2,
+          "Items": ["GET", "HEAD"]
+        }
+      },
+      "Compress": true,
+      "DefaultTTL": 3600,
+      "MaxTTL": 86400,
+      "ForwardedValues": {
+        "QueryString": false,
+        "Cookies": {
+          "Forward": "none"
+        }
+      }
+    },
+    "CacheBehaviors": {
+      "Quantity": 1,
+      "Items": [
+        {
+          "PathPattern": "/api/*",
+          "TargetOriginId": "APIGateway",
+          "ViewerProtocolPolicy": "redirect-to-https",
+          "AllowedMethods": {
+            "Quantity": 7,
+            "Items": ["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+            "CachedMethods": {
+              "Quantity": 2,
+              "Items": ["GET", "HEAD"]
+            }
+          },
+          "DefaultTTL": 0,
+          "MaxTTL": 0,
+          "ForwardedValues": {
+            "QueryString": true,
+            "Headers": {
+              "Quantity": 1,
+              "Items": ["*"]
+            },
+            "Cookies": {
+              "Forward": "all"
+            }
+          }
+        }
+      ]
+    },
+    "PriceClass": "PriceClass_100",
+    "Enabled": true,
+    "Comment": "YouTutor CloudFront distribution"
+  },
+  "Tags": {
+    "Items": [
+      {
+        "Key": "App",
+        "Value": "YouTutor"
+      }
+    ]
+  }
+}

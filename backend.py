@@ -49,6 +49,7 @@ STATIC = HERE / "static"
 HOME = Path.home()
 VENV_PYTHON_candidate = HOME / ".venv" / "Scripts" / "python.exe"
 VENV_PYTHON = VENV_PYTHON_candidate if VENV_PYTHON_candidate.exists() else Path(sys.executable)
+# On Lambda, yt-dlp might not be available as a module; the handler checks this at runtime
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────
@@ -440,7 +441,7 @@ def ask_llm(question: str, transcript_context: str, config: dict) -> str:
 
 # ── Audio download & transcription ─────────────────────────────────
 
-AUDIO_DIR = HERE / "audio_cache"
+AUDIO_DIR = Path("/tmp") / "audio_cache" if os.environ.get("AWS_EXECUTION_ENV") else HERE / "audio_cache"
 AUDIO_DIR.mkdir(exist_ok=True)
 
 
