@@ -69,36 +69,62 @@ _transcript_cache: dict[str, dict] = {}
 
 
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments for a video via YouTube's timedtext API."""
-    # Return cached immediately if available
+    """Fetch transcript segments for a video."""
     if video_id in _transcript_cache:
         cached = _transcript_cache[video_id]
         if isinstance(cached, list):
             return cached
         raise RuntimeError(str(cached))
 
-    # Try multiple language codes
-    lang_codes = ["en", "a.en", "en-US", "en-GB"]
     last_error = None
 
-    for lang in lang_codes:
+    # Approach 1: direct timedtext API
+    for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
-            url = (
-                f"https://www.youtube.com/api/timedtext"
-                f"?v={video_id}&lang={lang}&fmt=json3"
-            )
+            url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
             req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
             resp = http_req.urlopen(req, timeout=15)
             body = resp.read().decode("utf-8", errors="replace")
-            if not body.strip() or body.strip() == "{}":
-                continue
-            segments = parse_json3(body)
-            if segments:
-                _transcript_cache[video_id] = segments
-                return segments
+            if body.strip() and body.strip() != "{}":
+                segments = parse_json3(body)
+                if segments:
+                    _transcript_cache[video_id] = segments
+                    return segments
         except Exception as e:
             last_error = e
-            continue
+
+    # Approach 2: yt-dlp subtitle download (bypasses Python SSL issues)
+    try:
+        for f in AUDIO_DIR.glob(f"{video_id}*"):
+            f.unlink(missing_ok=True)
+        cmd = [
+            str(VENV_PYTHON), "-m", "yt_dlp",
+            "--write-subs", "--write-auto-sub",
+            "--sub-lang", "en.-en,en",
+            "--skip-download",
+            "-o", str(AUDIO_DIR / "%(id)s"),
+            "--no-warnings",
+            f"https://www.youtube.com/watch?v={video_id}",
+        ]
+        subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        for f in sorted(AUDIO_DIR.glob(f"{video_id}*")):
+            suffix = f.suffix
+            text = f.read_text(encoding="utf-8")
+            if suffix == ".vtt":
+                segments = parse_vtt(text)
+            elif suffix == ".srt":
+                segments = parse_srt(text)
+            elif suffix in (".json", ".json3"):
+                segments = parse_json3(text)
+            else:
+                continue
+            if segments:
+                for f2 in AUDIO_DIR.glob(f"{video_id}*"):
+                    f2.unlink(missing_ok=True)
+                _transcript_cache[video_id] = segments
+                return segments
+    except Exception as e:
+        last_error = e
 
     err_msg = f"Transcript unavailable: {last_error}"
     _transcript_cache[video_id] = err_msg
