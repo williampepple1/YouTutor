@@ -78,26 +78,28 @@ def get_transcript(video_id: str) -> list[dict]:
 
     last_error = None
 
-    # Approach 1: direct timedtext API
+    # Approach 1: direct timedtext API (with explicit TLS 1.2 to avoid SSL issues)
     for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
             url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            import warnings
-            warnings.filterwarnings("ignore", category=DeprecationWarning)
+            # Force TLS 1.2 which avoids OpenSSL 3.x negotiation bugs
             try:
-                import requests as reqs
-                resp = reqs.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"}, verify=False)
-                body = resp.text
-                status = resp.status_code
-            except ImportError:
-                req_ = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                ctx = ssl.create_default_context()
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
-                resp_ = http_req.urlopen(req_, context=ctx, timeout=15)
-                body = resp_.read().decode("utf-8", errors="replace")
-                status = resp_.status
-            if body.strip() and body.strip() != "{}":
+                tls_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+                tls_ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+                tls_ctx.maximum_version = ssl.TLSVersion.TLSv1_2
+                tls_ctx.check_hostname = False
+                tls_ctx.verify_mode = ssl.CERT_NONE
+                req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                resp = http_req.urlopen(req, context=tls_ctx, timeout=15)
+                body = resp.read().decode("utf-8", errors="replace")
+            except Exception:
+                # Fallback: try curl
+                curl_r = subprocess.run(
+                    ["curl", "-s", "-m", "15", "-H", "User-Agent: Mozilla/5.0", url],
+                    capture_output=True, text=True, timeout=20,
+                )
+                body = curl_r.stdout
+            if body.strip() and body.strip() != "{}" and body.strip().startswith("{"):
                 segments = parse_json3(body)
                 if segments:
                     _transcript_cache[video_id] = segments

@@ -5,6 +5,7 @@ WORKDIR /app
 # Install runtime deps (yt-dlp needs ffmpeg for some features)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
+    curl \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
