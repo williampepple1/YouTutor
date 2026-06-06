@@ -60,20 +60,11 @@ jobs:
           terraform init
           terraform apply -auto-approve -var="use_cloudfront=false"
 
-      - name: Upload Lambda zip to S3
+      - name: Upload Lambda zip to S3 & sync frontend
         run: |
           BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
           aws s3 cp deploy/lambda.zip s3://$BUCKET/lambda/lambda.zip
-
-      - name: Deploy frontend to S3
-        run: |
-          BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
           aws s3 sync static/ s3://$BUCKET/ --delete
-
-      - name: Update Lambda code
-        run: |
-          BUCKET=$(terraform -chdir=deploy/terraform output -raw s3_bucket)
-          aws lambda update-function-code --function-name yoututor-backend --s3-bucket $BUCKET --s3-key lambda/lambda.zip
 
       - name: Get CloudFront ID and invalidate (if deployed)
         run: |
