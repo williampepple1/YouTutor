@@ -101,15 +101,6 @@ def get_transcript(video_id: str) -> list[dict]:
             last_error = e
             continue
 
-    # Fallback: try yt-dlp subtitle download
-    try:
-        segments = _get_transcript_ytdlp(video_id)
-        if segments:
-            _transcript_cache[video_id] = segments
-            return segments
-    except Exception as e:
-        last_error = e
-
     err_msg = f"Transcript unavailable: {last_error}"
     _transcript_cache[video_id] = err_msg
     raise RuntimeError(err_msg)
