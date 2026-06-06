@@ -87,12 +87,11 @@ def get_transcript(video_id: str) -> list[dict]:
                 f"https://www.youtube.com/api/timedtext"
                 f"?v={video_id}&lang={lang}&fmt=json3"
             )
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            req = http_req.Request(url)
-            resp = http_req.urlopen(req, context=ctx, timeout=15)
-            body = resp.read().decode("utf-8")
+            req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            resp = http_req.urlopen(req, timeout=15)
+            body = resp.read().decode("utf-8", errors="replace")
+            if not body.strip() or body.strip() == "{}":
+                continue
             segments = parse_json3(body)
             if segments:
                 _transcript_cache[video_id] = segments
