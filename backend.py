@@ -77,26 +77,66 @@ def get_transcript(video_id: str) -> list[dict]:
             return cached
         raise RuntimeError(str(cached))
 
+    # Clean any stale files for this video
+    for f in AUDIO_DIR.glob(f"{video_id}*"):
+        f.unlink(missing_ok=True)
+
     try:
-        # Use yt-dlp to get auto-generated subtitles as JSON
+        # Use yt-dlp to get subtitles — try multiple approaches
+        output_template = str(AUDIO_DIR / "%(id)s")
+
+        # Approach 1: auto-generated subtitles as SRT
         cmd = [
             str(VENV_PYTHON), "-m", "yt_dlp",
             "--write-auto-sub", "--sub-lang", "en",
-            "--convert-subs", "srt",
-            "--skip-download", "-o", str(AUDIO_DIR / "%(id)s"),
+            "--sub-format", "srt",
+            "--skip-download",
+            "-o", output_template,
             "--no-warnings",
             f"https://www.youtube.com/watch?v={video_id}",
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        subprocess.run(cmd, capture_output=True, text=True, timeout=120)
 
-        srt_path = AUDIO_DIR / f"{video_id}.en.srt"
-        if not srt_path.exists():
-            # Try without auto (manual captions only)
-            srt_path = AUDIO_DIR / f"{video_id}.en.srt"
-            if not srt_path.exists():
-                raise RuntimeError("No subtitles found")
+        # Check for any subtitle file that was written
+        sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
+        srt_path = None
+        for f in sub_files:
+            if f.suffix in (".srt", ".vtt", ".json", ".json3"):
+                srt_path = f
+                break
 
-        segments = parse_srt(srt_path.read_text(encoding="utf-8"))
+        if srt_path is None:
+            # Approach 2: try with --write-subs (manual captions)
+            cmd = [
+                str(VENV_PYTHON), "-m", "yt_dlp",
+                "--write-subs", "--write-auto-sub",
+                "--sub-lang", "en",
+                "--sub-format", "srt",
+                "--skip-download",
+                "-o", output_template,
+                "--no-warnings",
+                f"https://www.youtube.com/watch?v={video_id}",
+            ]
+            subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+            sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
+            for f in sub_files:
+                if f.suffix in (".srt", ".vtt", ".json", ".json3"):
+                    srt_path = f
+                    break
+
+        if srt_path is None:
+            raise RuntimeError("No subtitles found")
+
+        # Parse based on format
+        text = srt_path.read_text(encoding="utf-8")
+        if srt_path.suffix == ".srt":
+            segments = parse_srt(text)
+        elif srt_path.suffix == ".vtt":
+            segments = parse_vtt(text)
+        elif srt_path.suffix in (".json", ".json3"):
+            segments = parse_json3(text)
+        else:
+            raise RuntimeError(f"Unknown subtitle format: {srt_path.suffix}")
 
         # Clean up
         for f in AUDIO_DIR.glob(f"{video_id}*"):
@@ -150,6 +190,57 @@ def parse_srt(srt_text: str) -> list[dict]:
             "duration": end - start,
         })
 
+    return segments
+
+
+def parse_vtt(vtt_text: str) -> list[dict]:
+    """Parse WebVTT subtitle text into segment list."""
+    segments = []
+    block_pattern = re.compile(
+        r"(?:.*\n)?"
+        r"(\d{2}:\d{2}:\d{2}[,\.]\d{3}) --> (\d{2}:\d{2}:\d{2}[,\.]\d{3})\n"
+        r"((?:(?!\n\n).)+)",
+        re.DOTALL | re.MULTILINE,
+    )
+
+    def _ts_to_sec(ts: str) -> float:
+        ts = ts.replace(",", ".")
+        h, m, s = ts.split(":")
+        return int(h) * 3600 + int(m) * 60 + float(s)
+
+    for match in block_pattern.finditer(vtt_text):
+        start_ts = match.group(1)
+        end_ts = match.group(2)
+        text = match.group(3).strip()
+        text = re.sub(r"<[^>]+>", "", text)
+        text = re.sub(r"\n+", " ", text)
+        text = re.sub(r"&amp;", "&", text)
+        text = re.sub(r"&lt;", "<", text)
+        text = re.sub(r"&gt;", ">", text)
+        start = _ts_to_sec(start_ts)
+        end = _ts_to_sec(end_ts)
+        segments.append({"text": text, "start": start, "duration": end - start})
+    return segments
+
+
+def parse_json3(json_text: str) -> list[dict]:
+    """Parse YouTube JSON3 subtitle format into segment list."""
+    import json
+    data = json.loads(json_text)
+    segments = []
+    for event in data.get("events", []):
+        segs = event.get("segs", [])
+        if not segs:
+            continue
+        text = "".join(s.get("utf8", "") for s in segs).strip()
+        if not text:
+            continue
+        start = event.get("tStartMs", 0) / 1000.0
+        dur = event.get("dDurationMs", 0) / 1000.0
+        if dur <= 0:
+            dur = 2.0
+        text = re.sub(r"\s+", " ", text)
+        segments.append({"text": text, "start": start, "duration": dur})
     return segments
 
 
