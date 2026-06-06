@@ -241,10 +241,6 @@ resource "aws_cloudfront_distribution" "main" {
   # }
 }
 
-resource "aws_cloudfront_origin_access_identity" "main" {
-  comment = "${var.app_name} OAI"
-}
-
 # ── Data Sources ──────────────────────────────────────────────────
 data "aws_caller_identity" "current" {}
 
