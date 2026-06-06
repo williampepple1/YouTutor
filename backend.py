@@ -69,51 +69,88 @@ _transcript_cache: dict[str, dict] = {}
 
 
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments for a video (cached)."""
+    """Fetch transcript segments for a video using yt-dlp (more reliable)."""
     # Return cached immediately if available
     if video_id in _transcript_cache:
         cached = _transcript_cache[video_id]
         if isinstance(cached, list):
             return cached
-        raise RuntimeError(str(cached))  # cached error
+        raise RuntimeError(str(cached))
 
-    from youtube_transcript_api import YouTubeTranscriptApi
-    api = YouTubeTranscriptApi()
-
-    # Try multiple strategies to get a transcript
-    strategies = [
-        ("English", lambda: api.fetch(video_id, languages=['en'])),
-        ("any language", lambda: api.fetch(video_id)),
-        ("English auto-generated", lambda: api.fetch(video_id, languages=['a.en'])),
-    ]
-
-    last_error = None
-    for label, fn in strategies:
-        try:
-            transcript = fn()
-            if transcript:
-                result = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
-                _transcript_cache[video_id] = result
-                return result
-        except Exception as e:
-            last_error = e
-            continue
-
-    # Last resort: list available transcripts and try the first one
     try:
-        transcript_list = api.list(video_id)
-        first = transcript_list.find_transcript([t.language_code for t in transcript_list])
-        if first:
-            transcript = first.fetch()
-            result = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
-            _transcript_cache[video_id] = result
-            return result
-    except Exception as e:
-        last_error = e
+        # Use yt-dlp to get auto-generated subtitles as JSON
+        cmd = [
+            str(VENV_PYTHON), "-m", "yt_dlp",
+            "--write-auto-sub", "--sub-lang", "en",
+            "--convert-subs", "srt",
+            "--skip-download", "-o", str(AUDIO_DIR / "%(id)s"),
+            "--no-warnings",
+            f"https://www.youtube.com/watch?v={video_id}",
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
-    err_msg = f"Transcript unavailable: {last_error}"
-    _transcript_cache[video_id] = err_msg
-    raise RuntimeError(err_msg)
+        srt_path = AUDIO_DIR / f"{video_id}.en.srt"
+        if not srt_path.exists():
+            # Try without auto (manual captions only)
+            srt_path = AUDIO_DIR / f"{video_id}.en.srt"
+            if not srt_path.exists():
+                raise RuntimeError("No subtitles found")
+
+        segments = parse_srt(srt_path.read_text(encoding="utf-8"))
+
+        # Clean up
+        for f in AUDIO_DIR.glob(f"{video_id}*"):
+            f.unlink(missing_ok=True)
+
+        _transcript_cache[video_id] = segments
+        return segments
+
+    except Exception as e:
+        err_msg = f"Transcript unavailable: {e}"
+        _transcript_cache[video_id] = err_msg
+        raise RuntimeError(err_msg)
+
+
+def parse_srt(srt_text: str) -> list[dict]:
+    """Parse SRT subtitle text into segment list."""
+    segments = []
+    # SRT format:
+    # 1
+    # 00:00:01,000 --> 00:00:04,000
+    # text line 1
+    # text line 2
+    #
+    block_pattern = re.compile(
+        r"\d+\n"
+        r"(\d{2}:\d{2}:\d{2}[,\.]\d{3}) --> (\d{2}:\d{2}:\d{2}[,\.]\d{3})\n"
+        r"((?:(?!\n\n).)+)",
+        re.DOTALL | re.MULTILINE,
+    )
+
+    def _ts_to_sec(ts: str) -> float:
+        """Convert SRT timestamp (HH:MM:SS,mmm) to seconds."""
+        ts = ts.replace(",", ".")
+        h, m, s = ts.split(":")
+        return int(h) * 3600 + int(m) * 60 + float(s)
+
+    for match in block_pattern.finditer(srt_text):
+        start_ts = match.group(1)
+        end_ts = match.group(2)
+        text = match.group(3).strip()
+        # Remove HTML tags like <font> etc.
+        text = re.sub(r"<[^>]+>", "", text)
+        # Remove multiple newlines
+        text = re.sub(r"\n+", " ", text)
+
+        start = _ts_to_sec(start_ts)
+        end = _ts_to_sec(end_ts)
+        segments.append({
+            "text": text,
+            "start": start,
+            "duration": end - start,
+        })
+
+    return segments
 
 
 def chunk_transcript(segments: list[dict], chunk_size: int = 800) -> list[dict]:
