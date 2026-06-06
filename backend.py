@@ -64,8 +64,19 @@ def run_ytdlp(*args: str, timeout: int = 60) -> list[dict]:
         raise RuntimeError(f"Failed to parse yt-dlp output: {e}")
 
 
+# ── Cache ──────────────────────────────────────────────────────────────────
+_transcript_cache: dict[str, dict] = {}
+
+
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments for a video."""
+    """Fetch transcript segments for a video (cached)."""
+    # Return cached immediately if available
+    if video_id in _transcript_cache:
+        cached = _transcript_cache[video_id]
+        if isinstance(cached, list):
+            return cached
+        raise RuntimeError(str(cached))  # cached error
+
     from youtube_transcript_api import YouTubeTranscriptApi
     api = YouTubeTranscriptApi()
 
@@ -81,7 +92,9 @@ def get_transcript(video_id: str) -> list[dict]:
         try:
             transcript = fn()
             if transcript:
-                return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+                result = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+                _transcript_cache[video_id] = result
+                return result
         except Exception as e:
             last_error = e
             continue
@@ -92,11 +105,15 @@ def get_transcript(video_id: str) -> list[dict]:
         first = transcript_list.find_transcript([t.language_code for t in transcript_list])
         if first:
             transcript = first.fetch()
-            return [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+            result = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+            _transcript_cache[video_id] = result
+            return result
     except Exception as e:
         last_error = e
 
-    raise RuntimeError(f"Transcript unavailable: {last_error}")
+    err_msg = f"Transcript unavailable: {last_error}"
+    _transcript_cache[video_id] = err_msg
+    raise RuntimeError(err_msg)
 
 
 def chunk_transcript(segments: list[dict], chunk_size: int = 800) -> list[dict]:
