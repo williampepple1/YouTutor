@@ -58,7 +58,7 @@ jobs:
         working-directory: deploy/terraform
         run: |
           terraform init
-          terraform apply -auto-approve -var="use_cloudfront=false"
+          terraform apply -auto-approve -var="use_cloudfront=true"
 
       - name: Upload Lambda zip to S3 & sync frontend
         run: |
