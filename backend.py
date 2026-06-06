@@ -82,11 +82,13 @@ def get_transcript(video_id: str) -> list[dict]:
     for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
             url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            # Use requests with SSL verification disabled if needed
+            import warnings
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
             try:
                 import requests as reqs
                 resp = reqs.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"}, verify=False)
                 body = resp.text
+                status = resp.status_code
             except ImportError:
                 req_ = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
                 ctx = ssl.create_default_context()
@@ -94,13 +96,21 @@ def get_transcript(video_id: str) -> list[dict]:
                 ctx.verify_mode = ssl.CERT_NONE
                 resp_ = http_req.urlopen(req_, context=ctx, timeout=15)
                 body = resp_.read().decode("utf-8", errors="replace")
+                status = resp_.status
             if body.strip() and body.strip() != "{}":
                 segments = parse_json3(body)
                 if segments:
                     _transcript_cache[video_id] = segments
                     return segments
         except Exception as e:
-            last_error = e
+            last_error = f"{e}"[:200]
+            if hasattr(e, "response") and hasattr(e.response, "text"):
+                last_error += f" | body: {e.response.text[:200]}"
+            elif hasattr(e, "read"):
+                try:
+                    last_error += f" | body: {e.read().decode('utf-8', errors='replace')[:200]}"
+                except Exception:
+                    pass
 
     # Approach 2: yt-dlp subtitle download
     try:
@@ -127,7 +137,9 @@ def get_transcript(video_id: str) -> list[dict]:
                 _transcript_cache[video_id] = segments
                 return segments
     except Exception as e:
-        last_error = e
+        last_error = f"{e}"[:200]
+        if hasattr(e, "stderr"):
+            last_error += f" | stderr: {e.stderr[:300]}"
 
     err_msg = f"Transcript unavailable: {last_error}"
     _transcript_cache[video_id] = err_msg
