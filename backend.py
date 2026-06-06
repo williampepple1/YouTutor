@@ -78,30 +78,24 @@ def get_transcript(video_id: str) -> list[dict]:
 
     last_error = None
 
-    # Approach 1: direct timedtext API
+    # Approach 1: curl for timedtext API (avoids Python SSL entirely)
     for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
             url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            # Try default SSL first
-            try:
-                req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                resp = http_req.urlopen(req, timeout=15)
-                body = resp.read().decode("utf-8", errors="replace")
-            except Exception:
-                # Retry with unverified SSL
-                ctx = ssl._create_unverified_context()
-                req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                resp = http_req.urlopen(req, context=ctx, timeout=15)
-                body = resp.read().decode("utf-8", errors="replace")
+            curl_r = subprocess.run(
+                ["curl", "-s", "-m", "15", "-H", "User-Agent: Mozilla/5.0", url],
+                capture_output=True, text=True, timeout=20,
+            )
+            body = curl_r.stdout
             if body.strip() and body.strip() != "{}" and body.strip().startswith("{"):
                 segments = parse_json3(body)
                 if segments:
                     _transcript_cache[video_id] = segments
                     return segments
         except Exception as e:
-            last_error = f"[lang={lang}] {e}"[:200]
+            last_error = f"[curl lang={lang}] {e}"[:200]
 
-    # Approach 2: yt-dlp subtitle download
+    # Approach 2: yt-dlp subtitle download (longer timeout, uses its own SSL)
     try:
         for f in AUDIO_DIR.glob(f"{video_id}*"):
             f.unlink(missing_ok=True)
@@ -115,7 +109,7 @@ def get_transcript(video_id: str) -> list[dict]:
             "--sub-format", "vtt",
             f"https://www.youtube.com/watch?v={video_id}",
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
         sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
         for f in sub_files:
             text = f.read_text(encoding="utf-8", errors="replace")
