@@ -69,7 +69,7 @@ _transcript_cache: dict[str, dict] = {}
 
 
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments for a video using yt-dlp (more reliable)."""
+    """Fetch transcript segments for a video via YouTube's timedtext API."""
     # Return cached immediately if available
     if video_id in _transcript_cache:
         cached = _transcript_cache[video_id]
@@ -77,78 +77,42 @@ def get_transcript(video_id: str) -> list[dict]:
             return cached
         raise RuntimeError(str(cached))
 
-    # Clean any stale files for this video
-    for f in AUDIO_DIR.glob(f"{video_id}*"):
-        f.unlink(missing_ok=True)
+    # Try multiple language codes
+    lang_codes = ["en", "a.en", "en-US", "en-GB"]
+    last_error = None
 
+    for lang in lang_codes:
+        try:
+            url = (
+                f"https://www.youtube.com/api/timedtext"
+                f"?v={video_id}&lang={lang}&fmt=json3"
+            )
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            req = http_req.Request(url)
+            resp = http_req.urlopen(req, context=ctx, timeout=15)
+            body = resp.read().decode("utf-8")
+            segments = parse_json3(body)
+            if segments:
+                _transcript_cache[video_id] = segments
+                return segments
+        except Exception as e:
+            last_error = e
+            continue
+
+    # Fallback: try yt-dlp subtitle download
     try:
-        # Use yt-dlp to get subtitles — try multiple approaches
-        output_template = str(AUDIO_DIR / "%(id)s")
-
-        # Approach 1: auto-generated subtitles as SRT
-        cmd = [
-            str(VENV_PYTHON), "-m", "yt_dlp",
-            "--write-auto-sub", "--sub-lang", "en",
-            "--sub-format", "srt",
-            "--skip-download",
-            "-o", output_template,
-            "--no-warnings",
-            f"https://www.youtube.com/watch?v={video_id}",
-        ]
-        subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-
-        # Check for any subtitle file that was written
-        sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
-        srt_path = None
-        for f in sub_files:
-            if f.suffix in (".srt", ".vtt", ".json", ".json3"):
-                srt_path = f
-                break
-
-        if srt_path is None:
-            # Approach 2: try with --write-subs (manual captions)
-            cmd = [
-                str(VENV_PYTHON), "-m", "yt_dlp",
-                "--write-subs", "--write-auto-sub",
-                "--sub-lang", "en",
-                "--sub-format", "srt",
-                "--skip-download",
-                "-o", output_template,
-                "--no-warnings",
-                f"https://www.youtube.com/watch?v={video_id}",
-            ]
-            subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-            sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
-            for f in sub_files:
-                if f.suffix in (".srt", ".vtt", ".json", ".json3"):
-                    srt_path = f
-                    break
-
-        if srt_path is None:
-            raise RuntimeError("No subtitles found")
-
-        # Parse based on format
-        text = srt_path.read_text(encoding="utf-8")
-        if srt_path.suffix == ".srt":
-            segments = parse_srt(text)
-        elif srt_path.suffix == ".vtt":
-            segments = parse_vtt(text)
-        elif srt_path.suffix in (".json", ".json3"):
-            segments = parse_json3(text)
-        else:
-            raise RuntimeError(f"Unknown subtitle format: {srt_path.suffix}")
-
-        # Clean up
-        for f in AUDIO_DIR.glob(f"{video_id}*"):
-            f.unlink(missing_ok=True)
-
-        _transcript_cache[video_id] = segments
-        return segments
-
+        segments = _get_transcript_ytdlp(video_id)
+        if segments:
+            _transcript_cache[video_id] = segments
+            return segments
     except Exception as e:
-        err_msg = f"Transcript unavailable: {e}"
-        _transcript_cache[video_id] = err_msg
-        raise RuntimeError(err_msg)
+        last_error = e
+
+    err_msg = f"Transcript unavailable: {last_error}"
+    _transcript_cache[video_id] = err_msg
+    raise RuntimeError(err_msg)
 
 
 def parse_srt(srt_text: str) -> list[dict]:
@@ -242,6 +206,34 @@ def parse_json3(json_text: str) -> list[dict]:
         text = re.sub(r"\s+", " ", text)
         segments.append({"text": text, "start": start, "duration": dur})
     return segments
+
+
+# ── Debug endpoint ────────────────────────────────────────────────
+@app.get("/api/debug")
+async def debug_info():
+    audio_ok = AUDIO_DIR.exists()
+    write_ok = True
+    try:
+        test_file = AUDIO_DIR / ".write_test"
+        test_file.write_text("ok")
+        test_file.unlink()
+    except Exception:
+        write_ok = False
+    try:
+        ver = subprocess.run(
+            [str(VENV_PYTHON), "-m", "yt_dlp", "--version"],
+            capture_output=True, text=True, timeout=10,
+        )
+        ytdlp_ver = ver.stdout.strip() or ver.stderr.strip()
+    except Exception as e:
+        ytdlp_ver = str(e)
+    return {
+        "python": sys.version,
+        "yt_dlp": ytdlp_ver,
+        "audio_dir": str(AUDIO_DIR),
+        "audio_dir_exists": audio_ok,
+        "audio_dir_writable": write_ok,
+    }
 
 
 def chunk_transcript(segments: list[dict], chunk_size: int = 800) -> list[dict]:
