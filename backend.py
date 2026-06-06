@@ -23,6 +23,12 @@ import ssl
 import tempfile
 import base64
 import uuid
+import certifi
+
+# Force certifi's CA bundle for all HTTPS connections (fixes HF Spaces SSL issue)
+os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+os.environ.setdefault("REQUESTS_CA_BUNDLE", certifi.where())
+
 import uvicorn
 
 # ── App setup ──────────────────────────────────────────────────────────────
