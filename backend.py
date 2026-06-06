@@ -75,29 +75,75 @@ _transcript_cache: dict[str, dict] = {}
 
 
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments using youtube-transcript-api."""
+    """Fetch transcript segments for a video."""
     if video_id in _transcript_cache:
         cached = _transcript_cache[video_id]
         if isinstance(cached, list):
             return cached
         raise RuntimeError(str(cached))
 
-    from youtube_transcript_api import YouTubeTranscriptApi
-    api = YouTubeTranscriptApi()
     last_error = None
 
-    for languages in [["en"], ["a.en"], ["en-US", "en-GB", "en"], None]:
-        try:
-            if languages:
-                transcript = api.fetch(video_id, languages=languages)
-            else:
-                transcript = api.fetch(video_id)
-            segments = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
-            if segments:
-                _transcript_cache[video_id] = segments
-                return segments
-        except Exception as e:
-            last_error = f"{e}"[:200]
+    # Primary: yt-dlp subtitle download (uses its own HTTP client, works on HF Spaces)
+    try:
+        for f in AUDIO_DIR.glob(f"{video_id}*"):
+            f.unlink(missing_ok=True)
+
+        cmd = [
+            str(VENV_PYTHON), "-m", "yt_dlp",
+            "--write-auto-sub", "--sub-lang", "en",
+            "--sub-format", "vtt",
+            "--skip-download",
+            "-o", str(AUDIO_DIR / "%(id)s"),
+            "--no-warnings",
+            f"https://www.youtube.com/watch?v={video_id}",
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        sub_files = sorted(AUDIO_DIR.glob(f"{video_id}*"))
+
+        if sub_files:
+            for f in sub_files:
+                text = f.read_text(encoding="utf-8", errors="replace")
+                if f.suffix == ".vtt":
+                    segments = parse_vtt(text)
+                elif f.suffix == ".srt":
+                    segments = parse_srt(text)
+                elif f.suffix in (".json", ".json3"):
+                    segments = parse_json3(text)
+                else:
+                    continue
+                if segments:
+                    for f2 in sub_files:
+                        f2.unlink(missing_ok=True)
+                    _transcript_cache[video_id] = segments
+                    return segments
+
+            last_error = "yt-dlp wrote files but couldn't parse them"
+            for f in sub_files:
+                f.unlink(missing_ok=True)
+        else:
+            last_error = f"yt-dlp found no subs: {result.stderr[:200]}"
+
+    except subprocess.TimeoutExpired:
+        last_error = "yt-dlp timed out"
+    except Exception as e:
+        last_error = f"yt-dlp error: {e}"[:200]
+
+    # Fallback: youtube-transcript-api (uses Python SSL, may fail on HF Spaces)
+    try:
+        from youtube_transcript_api import YouTubeTranscriptApi
+        api = YouTubeTranscriptApi()
+        for languages in [["en"], ["a.en"], None]:
+            try:
+                transcript = api.fetch(video_id, languages=languages) if languages else api.fetch(video_id)
+                segments = [{"text": s.text, "start": s.start, "duration": s.duration} for s in transcript]
+                if segments:
+                    _transcript_cache[video_id] = segments
+                    return segments
+            except Exception:
+                continue
+    except Exception as e:
+        last_error = f"{e}"[:200]
 
     err_msg = f"Transcript unavailable: {last_error}"
     _transcript_cache[video_id] = err_msg
