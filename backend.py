@@ -75,7 +75,7 @@ _transcript_cache: dict[str, dict] = {}
 
 
 def get_transcript(video_id: str) -> list[dict]:
-    """Fetch transcript segments for a video."""
+    """Fetch transcript segments for a video using yt-dlp (works on HF Spaces)."""
     if video_id in _transcript_cache:
         cached = _transcript_cache[video_id]
         if isinstance(cached, list):
@@ -84,51 +84,61 @@ def get_transcript(video_id: str) -> list[dict]:
 
     last_error = None
 
-    # Approach 1: curl for timedtext API (avoids Python SSL entirely)
-    for lang in ["en", "a.en", "en-US", "en-GB"]:
+    # Use yt-dlp to download subtitles (handles SSL with its own HTTP client)
+    for attempt in range(2):
         try:
-            url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            curl_r = subprocess.run(
-                ["curl", "-s", "-m", "15", "-H", "User-Agent: Mozilla/5.0", url],
-                capture_output=True, text=True, timeout=20,
-            )
-            body = curl_r.stdout
-            if body.strip() and body.strip() != "{}" and body.strip().startswith("{"):
-                segments = parse_json3(body)
+            for f in AUDIO_DIR.glob(f"{video_id}*"):
+                f.unlink(missing_ok=True)
+
+            cmd = [
+                str(VENV_PYTHON), "-m", "yt_dlp",
+                "--write-subs", "--write-auto-sub",
+                "--sub-lang", "en",
+                "--sub-format", "vtt",
+                "--skip-download",
+                "-o", str(AUDIO_DIR / "%(id)s"),
+                "--no-warnings",
+                "--ignore-errors",
+                f"https://www.youtube.com/watch?v={video_id}",
+            ]
+            if attempt == 1:
+                # Second attempt: try with --allow-unplayable-formats
+                cmd.insert(cmd.index("--skip-download"), "--allow-unplayable-formats")
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+
+            sub_files = sorted(AUDIO_DIR.glob(f"{video_id}*"))
+            if not sub_files:
+                # Try with different sub-lang format
+                cmd[cmd.index("--sub-lang") + 1] = "en-US,en-GB,en"
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+                sub_files = sorted(AUDIO_DIR.glob(f"{video_id}*"))
+
+            for f in sub_files:
+                text = f.read_text(encoding="utf-8", errors="replace")
+                if f.suffix == ".vtt":
+                    segments = parse_vtt(text)
+                elif f.suffix == ".srt":
+                    segments = parse_srt(text)
+                elif f.suffix in (".json", ".json3"):
+                    segments = parse_json3(text)
+                else:
+                    continue
                 if segments:
+                    for f2 in sub_files:
+                        f2.unlink(missing_ok=True)
                     _transcript_cache[video_id] = segments
                     return segments
-        except Exception as e:
-            last_error = f"[curl lang={lang}] {e}"[:200]
 
-    # Approach 2: yt-dlp subtitle download (longer timeout, uses its own SSL)
-    try:
-        for f in AUDIO_DIR.glob(f"{video_id}*"):
-            f.unlink(missing_ok=True)
-        cmd = [
-            str(VENV_PYTHON), "-m", "yt_dlp",
-            "--write-subs", "--write-auto-sub",
-            "--sub-lang", "en",
-            "--skip-download",
-            "-o", str(AUDIO_DIR / "%(id)s"),
-            "--no-warnings",
-            "--sub-format", "vtt",
-            f"https://www.youtube.com/watch?v={video_id}",
-        ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-        sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
-        for f in sub_files:
-            text = f.read_text(encoding="utf-8", errors="replace")
-            segments = parse_vtt(text) if f.suffix == ".vtt" else parse_srt(text) if f.suffix == ".srt" else parse_json3(text) if f.suffix in (".json", ".json3") else None
-            if segments:
-                for f2 in sub_files:
-                    f2.unlink(missing_ok=True)
-                _transcript_cache[video_id] = segments
-                return segments
-    except Exception as e:
-        last_error = f"{e}"[:200]
-        if hasattr(e, "stderr"):
-            last_error += f" | stderr: {e.stderr[:300]}"
+            last_error = "No subtitle files found"
+            # Clean up on failure
+            for f in sub_files:
+                f.unlink(missing_ok=True)
+
+        except subprocess.TimeoutExpired:
+            last_error = "yt-dlp timed out (180s)"
+        except Exception as e:
+            last_error = f"{e}"[:200]
 
     err_msg = f"Transcript unavailable: {last_error}"
     _transcript_cache[video_id] = err_msg
