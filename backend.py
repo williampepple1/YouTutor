@@ -78,41 +78,28 @@ def get_transcript(video_id: str) -> list[dict]:
 
     last_error = None
 
-    # Approach 1: direct timedtext API (with explicit TLS 1.2 to avoid SSL issues)
+    # Approach 1: direct timedtext API
     for lang in ["en", "a.en", "en-US", "en-GB"]:
         try:
             url = f"https://www.youtube.com/api/timedtext?v={video_id}&lang={lang}&fmt=json3"
-            # Force TLS 1.2 which avoids OpenSSL 3.x negotiation bugs
+            # Try default SSL first
             try:
-                tls_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-                tls_ctx.minimum_version = ssl.TLSVersion.TLSv1_2
-                tls_ctx.maximum_version = ssl.TLSVersion.TLSv1_2
-                tls_ctx.check_hostname = False
-                tls_ctx.verify_mode = ssl.CERT_NONE
                 req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                resp = http_req.urlopen(req, context=tls_ctx, timeout=15)
+                resp = http_req.urlopen(req, timeout=15)
                 body = resp.read().decode("utf-8", errors="replace")
             except Exception:
-                # Fallback: try curl
-                curl_r = subprocess.run(
-                    ["curl", "-s", "-m", "15", "-H", "User-Agent: Mozilla/5.0", url],
-                    capture_output=True, text=True, timeout=20,
-                )
-                body = curl_r.stdout
+                # Retry with unverified SSL
+                ctx = ssl._create_unverified_context()
+                req = http_req.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                resp = http_req.urlopen(req, context=ctx, timeout=15)
+                body = resp.read().decode("utf-8", errors="replace")
             if body.strip() and body.strip() != "{}" and body.strip().startswith("{"):
                 segments = parse_json3(body)
                 if segments:
                     _transcript_cache[video_id] = segments
                     return segments
         except Exception as e:
-            last_error = f"{e}"[:200]
-            if hasattr(e, "response") and hasattr(e.response, "text"):
-                last_error += f" | body: {e.response.text[:200]}"
-            elif hasattr(e, "read"):
-                try:
-                    last_error += f" | body: {e.read().decode('utf-8', errors='replace')[:200]}"
-                except Exception:
-                    pass
+            last_error = f"[lang={lang}] {e}"[:200]
 
     # Approach 2: yt-dlp subtitle download
     try:
