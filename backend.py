@@ -93,33 +93,27 @@ def get_transcript(video_id: str) -> list[dict]:
         except Exception as e:
             last_error = e
 
-    # Approach 2: yt-dlp subtitle download (bypasses Python SSL issues)
+    # Approach 2: yt-dlp subtitle download
     try:
         for f in AUDIO_DIR.glob(f"{video_id}*"):
             f.unlink(missing_ok=True)
         cmd = [
             str(VENV_PYTHON), "-m", "yt_dlp",
             "--write-subs", "--write-auto-sub",
-            "--sub-lang", "en.-en,en",
+            "--sub-lang", "en",
             "--skip-download",
             "-o", str(AUDIO_DIR / "%(id)s"),
             "--no-warnings",
+            "--sub-format", "vtt",
             f"https://www.youtube.com/watch?v={video_id}",
         ]
-        subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-        for f in sorted(AUDIO_DIR.glob(f"{video_id}*")):
-            suffix = f.suffix
-            text = f.read_text(encoding="utf-8")
-            if suffix == ".vtt":
-                segments = parse_vtt(text)
-            elif suffix == ".srt":
-                segments = parse_srt(text)
-            elif suffix in (".json", ".json3"):
-                segments = parse_json3(text)
-            else:
-                continue
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+        sub_files = list(AUDIO_DIR.glob(f"{video_id}*"))
+        for f in sub_files:
+            text = f.read_text(encoding="utf-8", errors="replace")
+            segments = parse_vtt(text) if f.suffix == ".vtt" else parse_srt(text) if f.suffix == ".srt" else parse_json3(text) if f.suffix in (".json", ".json3") else None
             if segments:
-                for f2 in AUDIO_DIR.glob(f"{video_id}*"):
+                for f2 in sub_files:
                     f2.unlink(missing_ok=True)
                 _transcript_cache[video_id] = segments
                 return segments
