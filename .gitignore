@@ -5,6 +5,9 @@ __pycache__/
 dist/
 build/
 
+# App
+audio_cache/
+
 # Virtual environment
 .venv/
 venv/
